@@ -230,15 +230,11 @@ export default function Home() {
             {/* Hero Section with Backdrop Mosaic */}
             <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
               {/* Background Mosaic Grid */}
-              <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1 opacity-80">
+              <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-0">
                 {uniqueCollections.slice(0, 48).map((inst, idx) => (
                   <div 
                     key={inst.collectionSlug + idx}
-                    className="aspect-square relative overflow-hidden"
-                    style={{
-                      transform: `scale(${1 + (idx % 3) * 0.1})`,
-                      opacity: 0.6 + (idx % 4) * 0.1
-                    }}
+                    className="aspect-square relative"
                   >
                     {inst.imageUrl ? (
                       <img 
