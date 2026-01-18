@@ -1,29 +1,50 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
-import { instruments, Instrument } from '@/data/detailed-instruments';
+import { instruments, Instrument } from '@/data/full-instruments';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-// Create a compact catalog for Claude (faster)
-function getInstrumentCatalog(): string {
-  const byCategory: Record<string, Instrument[]> = {};
+// Group instruments by collection for Claude (much smaller)
+function getCollectionCatalog(): { catalog: string; byCollection: Record<string, Instrument[]> } {
+  const byCollection: Record<string, Instrument[]> = {};
   
   instruments.forEach(inst => {
-    if (!byCategory[inst.category]) {
-      byCategory[inst.category] = [];
+    if (!byCollection[inst.collectionSlug]) {
+      byCollection[inst.collectionSlug] = [];
     }
-    byCategory[inst.category].push(inst);
+    byCollection[inst.collectionSlug].push(inst);
   });
   
-  let catalog = "INSTRUMENTS:\n";
+  // Create a simple list of collections with their slugs
+  const collections = Object.entries(byCollection).map(([slug, insts]) => {
+    const category = insts[0]?.category || 'other';
+    return `${slug} (${category}, ${insts.length} sounds)`;
+  });
   
-  for (const [category, insts] of Object.entries(byCategory)) {
-    catalog += `[${category}] ` + insts.map(i => `${i.name}(${i.id})`).join(', ') + '\n';
+  return {
+    catalog: collections.join(', '),
+    byCollection
+  };
+}
+
+// Pick a representative articulation from a collection
+function pickFromCollection(collectionSlug: string, byCollection: Record<string, Instrument[]>): Instrument | null {
+  const collectionInsts = byCollection[collectionSlug];
+  if (!collectionInsts || collectionInsts.length === 0) {
+    // Try partial match
+    const matchKey = Object.keys(byCollection).find(k => 
+      k.includes(collectionSlug) || collectionSlug.includes(k)
+    );
+    if (matchKey) {
+      const insts = byCollection[matchKey];
+      return insts[Math.floor(Math.random() * insts.length)];
+    }
+    return null;
   }
-  
-  return catalog;
+  // Pick a random articulation from the collection
+  return collectionInsts[Math.floor(Math.random() * collectionInsts.length)];
 }
 
 export async function POST(request: NextRequest) {
@@ -38,35 +59,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'ANTHROPIC_API_KEY not configured' }, { status: 500 });
     }
 
-    const catalog = getInstrumentCatalog();
+    const { catalog, byCollection } = getCollectionCatalog();
     
-    const systemPrompt = `Suggest Musio instrument combos. ONLY use IDs from: ${catalog}`;
+    const systemPrompt = `You are a music composition assistant. Suggest instrument combinations from the Musio catalog. Use ONLY these collection slugs: ${catalog}`;
 
-    const userPrompt = `"${prompt}" - Give 3 combos of 12 instruments each. JSON only, no markdown:
-{"combos":[{"name":"","description":"","instruments":[{"id":"","role":""}],"tags":[],"moods":[]}]}`;
+    const userPrompt = `"${prompt}" - Suggest 3 different instrument rack combos of 12 collections each. Return ONLY valid JSON:
+{"combos":[{"name":"Combo Name","description":"Brief description","instruments":[{"id":"collection-slug","role":"lead|harmony|rhythm|bass|texture|percussion|accent"}],"tags":["tag1"],"moods":["mood1"]}]}`;
 
     const message = await anthropic.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 1500,
-      messages: [
-        {
-          role: 'user',
-          content: userPrompt,
-        },
-      ],
+      max_tokens: 2000,
+      messages: [{ role: 'user', content: userPrompt }],
       system: systemPrompt,
     });
 
-    // Extract the text content
     const textContent = message.content.find(c => c.type === 'text');
     if (!textContent || textContent.type !== 'text') {
       throw new Error('No text response from Claude');
     }
 
-    // Parse the JSON response
     let comboData;
     try {
-      // Clean up the response in case it has markdown code blocks
       let jsonStr = textContent.text.trim();
       if (jsonStr.startsWith('```')) {
         jsonStr = jsonStr.replace(/```json?\n?/g, '').replace(/```$/g, '').trim();
@@ -77,28 +90,14 @@ export async function POST(request: NextRequest) {
       throw new Error('Failed to parse recommendation response');
     }
 
-    // Process all combos
-    const combosArray = comboData.combos || [comboData]; // Handle both formats
+    const combosArray = comboData.combos || [comboData];
     
     const processedCombos = combosArray.map((singleCombo: any, index: number) => {
-      // Validate and enrich the instruments with full data
       const enrichedInstruments = singleCombo.instruments.map((inst: { id: string; role: string }) => {
-        const fullInstrument = instruments.find(i => i.id === inst.id);
+        // Pick an actual articulation from the collection Claude suggested
+        const fullInstrument = pickFromCollection(inst.id, byCollection);
         if (!fullInstrument) {
-          // Try to find by partial match
-          const partialMatch = instruments.find(i => 
-            i.id.includes(inst.id) || inst.id.includes(i.id) ||
-            i.name.toLowerCase().includes(inst.id.toLowerCase())
-          );
-          if (partialMatch) {
-            return {
-              ...partialMatch,
-              assignedRole: inst.role,
-              reason: 'AI selected',
-              matchScore: 90,
-            };
-          }
-          console.warn(`Instrument not found: ${inst.id}`);
+          console.warn(`Collection not found: ${inst.id}`);
           return null;
         }
         return {

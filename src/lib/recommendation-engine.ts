@@ -11,7 +11,7 @@ import {
   getInstrumentsByMood,
   getInstrumentsByGenre,
   getInstrumentsByRole
-} from '@/data/detailed-instruments';
+} from '@/data/full-instruments';
 
 export interface ComboRequest {
   description?: string;
