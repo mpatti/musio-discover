@@ -178,56 +178,6 @@ export default function Home() {
     setPalette(palette.filter(i => i.id !== id));
   };
 
-  // Featured instruments - find one from each collection slug
-  const featuredCollectionSlugs = [
-    'mister-rogers-celeste',
-    'cinelegacy-harp',
-    'create-series-toy-xylo',
-    'tongue-drum',
-    'create-series-kalimba',
-    'accent-pianos',
-    'twisted-psaltry-cinematic-fx',
-    'tonal-tickles',
-    'ancient-bones',
-    'cinestrings-core',
-    'cinebrass-pro',
-    'cinewinds-core',
-  ];
-  const featuredInstruments = useMemo(() => {
-    const seen = new Set<string>();
-    return featuredCollectionSlugs
-      .map(slug => instruments.find(i => i.collectionSlug === slug))
-      .filter((inst): inst is typeof instruments[0] => {
-        if (!inst || seen.has(inst.collectionSlug)) return false;
-        seen.add(inst.collectionSlug);
-        return true;
-      });
-  }, []);
-  
-  // New Sounds from Cinesamples - one instrument per collection
-  const newSoundsInstruments = useMemo(() => {
-    const slugs = [
-      'south-african-voices-group',
-      'south-african-voices-female',
-      'south-african-voices-male',
-      'cinelegacy-harp',
-      'drum-machine-cr78',
-      'drum-machine-cr8000',
-      'drum-machine-dmx',
-      'drum-machine-sk1',
-      'drum-machine-tr606',
-      'african-marimba',
-    ];
-    const seen = new Set<string>();
-    return slugs
-      .map(slug => instruments.find(i => i.collectionSlug === slug))
-      .filter((inst): inst is typeof instruments[0] => {
-        if (!inst || seen.has(inst.collectionSlug)) return false;
-        seen.add(inst.collectionSlug);
-        return true;
-      });
-  }, []);
-
   // Unique collections for catalog view (one per collectionSlug)
   const uniqueCollections = useMemo(() => {
     const seen = new Set<string>();
@@ -280,7 +230,7 @@ export default function Home() {
             {/* Hero Section with Backdrop Mosaic */}
             <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
               {/* Background Mosaic Grid */}
-              <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1 opacity-40">
+              <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1 opacity-60">
                 {uniqueCollections.slice(0, 48).map((inst, idx) => (
                   <div 
                     key={inst.collectionSlug + idx}
@@ -557,87 +507,7 @@ export default function Home() {
                     </div>
                   </div>
                 </motion.section>
-              ) : (
-                /* Empty State - Show featured content */
-                <motion.section
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                >
-                  {/* New Sounds */}
-                  <div className="mb-8">
-                    <h3 className="section-title mb-4">New Sounds from Cinesamples (Included in Musio+)</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                      {newSoundsInstruments.map((instrument) => (
-                        <div
-                          key={instrument.id}
-                          className="instrument-card group"
-                          onClick={() => addToPalette(instrument)}
-                        >
-                          <div 
-                            className="cover relative"
-                            style={{ background: categoryGradients[instrument.category] }}
-                          >
-                            {instrument.imageUrl && (
-                              <img 
-                                src={instrument.imageUrl} 
-                                alt={instrument.name}
-                                loading="eager"
-                                className="absolute inset-0 w-full h-full object-cover"
-                              />
-                            )}
-                            {!instrument.imageUrl && (
-                              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="cover-text text-base">{instrument.name.split(' ').slice(0, 2).join(' ')}</span>
-                              </div>
-                            )}
-                          </div>
-                          <div className="info">
-                            <p className="title">{instrument.name}</p>
-                            <p className="subtitle">{instrument.description}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Collections */}
-                  <div>
-                    <h3 className="section-title mb-4">Featured Instruments</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                      {featuredInstruments.map((instrument) => (
-                        <div
-                          key={instrument.id}
-                          className="instrument-card group"
-                          onClick={() => addToPalette(instrument)}
-                        >
-                          <div 
-                            className="cover"
-                            style={{ background: categoryGradients[instrument.category] }}
-                          >
-                            {instrument.imageUrl && (
-                              <img 
-                                src={instrument.imageUrl} 
-                                alt={instrument.name}
-                                loading="eager"
-                                className="absolute inset-0 w-full h-full object-cover"
-                              />
-                            )}
-                            {!instrument.imageUrl && (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="cover-text text-xs">{instrument.name}</span>
-                              </div>
-                            )}
-                          </div>
-                          <div className="info">
-                            <p className="title text-xs">{instrument.name}</p>
-                            <p className="subtitle">{instrument.collection}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.section>
-              )}
+              ) : null}
             </AnimatePresence>
             </section>
           </>
