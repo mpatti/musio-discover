@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     
     const systemPrompt = `Suggest Musio instrument combos. ONLY use IDs from: ${catalog}`;
 
-    const userPrompt = `"${prompt}" - Give 3 combos of 6 instruments each. JSON only, no markdown:
+    const userPrompt = `"${prompt}" - Give 3 combos of 12 instruments each. JSON only, no markdown:
 {"combos":[{"name":"","description":"","instruments":[{"id":"","role":""}],"tags":[],"moods":[]}]}`;
 
     const message = await anthropic.messages.create({
