@@ -72,6 +72,188 @@ function generateId(collection: string, instrument: string, articulation: string
 // All instruments data
 const instrumentsRaw = [
   {
+    "collection": "Ancient Bones",
+    "collectionSlug": "ancient-bones",
+    "instrument": "Ancient Bones",
+    "articulation": "Ensemble",
+    "fullName": "Ancient Bones - Ancient Bones - Ensemble"
+  },
+  {
+    "collection": "Randy Kerber Celeste",
+    "collectionSlug": "randy-kerber-celeste",
+    "instrument": "Celeste",
+    "articulation": "Main",
+    "fullName": "Randy Kerber Celeste - Celeste - Main"
+  },
+  {
+    "collection": "CinePerc World",
+    "collectionSlug": "cineperc-world",
+    "instrument": "World Percussion",
+    "articulation": "Ensemble",
+    "fullName": "CinePerc World - World Percussion - Ensemble"
+  },
+  {
+    "collection": "Cine Piano",
+    "collectionSlug": "cine-piano",
+    "instrument": "Concert Grand",
+    "articulation": "Main",
+    "fullName": "Cine Piano - Concert Grand - Main"
+  },
+  {
+    "collection": "Create Series Kalimba",
+    "collectionSlug": "create-series-kalimba",
+    "instrument": "Kalimba",
+    "articulation": "Main",
+    "fullName": "Create Series Kalimba - Kalimba - Main"
+  },
+  {
+    "collection": "Tongue Drum",
+    "collectionSlug": "tongue-drum",
+    "instrument": "Tongue Drum",
+    "articulation": "Main",
+    "fullName": "Tongue Drum - Tongue Drum - Main"
+  },
+  {
+    "collection": "Create Series Toy Xylo",
+    "collectionSlug": "create-series-toy-xylo",
+    "instrument": "Toy Xylophone",
+    "articulation": "Main",
+    "fullName": "Create Series Toy Xylo - Toy Xylophone - Main"
+  },
+  {
+    "collection": "Drums in Blue",
+    "collectionSlug": "drums-in-blue",
+    "instrument": "Jazz Drums",
+    "articulation": "Kit",
+    "fullName": "Drums in Blue - Jazz Drums - Kit"
+  },
+  {
+    "collection": "Emotional Piano",
+    "collectionSlug": "emotional-piano",
+    "instrument": "Piano",
+    "articulation": "Emotional",
+    "fullName": "Emotional Piano - Piano - Emotional"
+  },
+  {
+    "collection": "Handbells",
+    "collectionSlug": "handbells",
+    "instrument": "Handbells",
+    "articulation": "Ensemble",
+    "fullName": "Handbells - Handbells - Ensemble"
+  },
+  {
+    "collection": "Mister Rogers Celeste",
+    "collectionSlug": "mister-rogers-celeste",
+    "instrument": "Celeste",
+    "articulation": "Main",
+    "fullName": "Mister Rogers Celeste - Celeste - Main"
+  },
+  {
+    "collection": "Rhodes 73 EP",
+    "collectionSlug": "rhodes-73-ep",
+    "instrument": "Rhodes 73",
+    "articulation": "Electric Piano",
+    "fullName": "Rhodes 73 EP - Rhodes 73 - Electric Piano"
+  },
+  {
+    "collection": "Session Piano Grand",
+    "collectionSlug": "session-piano-grand",
+    "instrument": "Grand Piano",
+    "articulation": "Main",
+    "fullName": "Session Piano Grand - Grand Piano - Main"
+  },
+  {
+    "collection": "Session Piano Upright",
+    "collectionSlug": "session-piano-upright",
+    "instrument": "Upright Piano",
+    "articulation": "Main",
+    "fullName": "Session Piano Upright - Upright Piano - Main"
+  },
+  {
+    "collection": "Sunset Drums",
+    "collectionSlug": "sunset-drums",
+    "instrument": "Drums",
+    "articulation": "Kit",
+    "fullName": "Sunset Drums - Drums - Kit"
+  },
+  {
+    "collection": "Village Drums",
+    "collectionSlug": "village-drums",
+    "instrument": "Village Drums",
+    "articulation": "Ensemble",
+    "fullName": "Village Drums - Village Drums - Ensemble"
+  },
+  {
+    "collection": "Village Mallets",
+    "collectionSlug": "village-mallets",
+    "instrument": "Mallets",
+    "articulation": "Ensemble",
+    "fullName": "Village Mallets - Mallets - Ensemble"
+  },
+  {
+    "collection": "Drum Machine LinnDrum",
+    "collectionSlug": "drum-machine-linndrum",
+    "instrument": "LinnDrum",
+    "articulation": "Kit",
+    "fullName": "Drum Machine LinnDrum - LinnDrum - Kit"
+  },
+  {
+    "collection": "Drum Machine TR-707",
+    "collectionSlug": "drum-machine-tr707",
+    "instrument": "TR-707",
+    "articulation": "Kit",
+    "fullName": "Drum Machine TR-707 - TR-707 - Kit"
+  },
+  {
+    "collection": "Drum Machine TR-909",
+    "collectionSlug": "drum-machine-tr909",
+    "instrument": "TR-909",
+    "articulation": "Kit",
+    "fullName": "Drum Machine TR-909 - TR-909 - Kit"
+  },
+  {
+    "collection": "TB-303",
+    "collectionSlug": "tb303",
+    "instrument": "TB-303",
+    "articulation": "Bass Synth",
+    "fullName": "TB-303 - TB-303 - Bass Synth"
+  },
+  {
+    "collection": "Oberheim",
+    "collectionSlug": "oberheim",
+    "instrument": "Oberheim",
+    "articulation": "Synth",
+    "fullName": "Oberheim - Oberheim - Synth"
+  },
+  {
+    "collection": "Octave Cat",
+    "collectionSlug": "octave-cat",
+    "instrument": "Octave Cat",
+    "articulation": "Synth",
+    "fullName": "Octave Cat - Octave Cat - Synth"
+  },
+  {
+    "collection": "PPG Wave 2",
+    "collectionSlug": "ppg-wave-2",
+    "instrument": "PPG Wave 2",
+    "articulation": "Wavetable",
+    "fullName": "PPG Wave 2 - PPG Wave 2 - Wavetable"
+  },
+  {
+    "collection": "Rhodes Chroma",
+    "collectionSlug": "rhodes-chroma",
+    "instrument": "Rhodes Chroma",
+    "articulation": "Synth",
+    "fullName": "Rhodes Chroma - Rhodes Chroma - Synth"
+  },
+  {
+    "collection": "Wurlitzer",
+    "collectionSlug": "wurlitzer",
+    "instrument": "Wurlitzer",
+    "articulation": "Electric Piano",
+    "fullName": "Wurlitzer - Wurlitzer - Electric Piano"
+  },
+  {
     "collection": "Piano in Blue",
     "collectionSlug": "piano-in-blue",
     "instrument": "Steinway D",
