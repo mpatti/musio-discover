@@ -231,7 +231,7 @@ export default function Home() {
             <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
               {/* Background Mosaic Grid */}
               <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-0 blur-[2px]">
-                {uniqueCollections.slice(0, 48).map((inst, idx) => (
+                {uniqueCollections.map((inst, idx) => (
                   <div 
                     key={inst.collectionSlug + idx}
                     className="aspect-square relative"
