@@ -230,7 +230,7 @@ export default function Home() {
             {/* Hero Section with Backdrop Mosaic */}
             <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
               {/* Background Mosaic Grid */}
-              <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1 opacity-60">
+              <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1 opacity-80">
                 {uniqueCollections.slice(0, 48).map((inst, idx) => (
                   <div 
                     key={inst.collectionSlug + idx}
@@ -257,11 +257,11 @@ export default function Home() {
                 ))}
               </div>
               
-              {/* Dark Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-[var(--color-bg-primary)]" />
+              {/* Dark Gradient Overlay - lighter version */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-[var(--color-bg-primary)]" />
               
-              {/* Radial Gradient for Center Focus */}
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.7)_70%)]" />
+              {/* Radial Gradient for Center Focus - lighter */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_80%)]" />
 
               {/* Content */}
               <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
