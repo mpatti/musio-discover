@@ -228,20 +228,24 @@ export default function Home() {
         {activeTab === 'discover' ? (
           <>
             {/* Hero Section with Backdrop Mosaic */}
-            <section className="relative min-h-[calc(100vh-64px)] flex items-center justify-center overflow-hidden">
-              {/* Background Mosaic Grid - Angled like Netflix */}
+            <section 
+              className="relative min-h-[calc(100vh-64px)] flex items-center justify-center overflow-hidden"
+              style={{ perspective: '1000px' }}
+            >
+              {/* Background Mosaic Grid - 3D Netflix style */}
               <div 
-                className="absolute grid grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-1 blur-[1px]"
+                className="absolute grid grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2"
                 style={{
-                  top: '-20%',
-                  left: '-10%',
-                  right: '-10%',
-                  bottom: '-20%',
-                  transform: 'rotate(-10deg) scale(1.2)',
+                  top: '-50%',
+                  left: '-30%',
+                  right: '-30%',
+                  bottom: '-50%',
+                  transform: 'rotateX(15deg) rotateZ(-12deg) scale(1.5)',
                   transformOrigin: 'center center',
+                  transformStyle: 'preserve-3d',
                 }}
               >
-                {[...uniqueCollections, ...uniqueCollections].map((inst, idx) => (
+                {[...uniqueCollections, ...uniqueCollections, ...uniqueCollections].map((inst, idx) => (
                   <div 
                     key={inst.collectionSlug + idx}
                     className="aspect-[2/3] relative"
@@ -250,12 +254,12 @@ export default function Home() {
                       <img 
                         src={inst.imageUrl}
                         alt=""
-                        className="w-full h-full object-cover rounded-sm"
+                        className="w-full h-full object-cover rounded-md shadow-lg"
                         loading="lazy"
                       />
                     ) : (
                       <div 
-                        className="w-full h-full rounded-sm"
+                        className="w-full h-full rounded-md shadow-lg"
                         style={{ background: categoryGradients[inst.category] }}
                       />
                     )}
