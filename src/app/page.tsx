@@ -328,6 +328,24 @@ export default function Home() {
                     </button>
                   ))}
                 </div>
+
+                {/* Progress Bar */}
+                {isGenerating && (
+                  <div className="mt-8 max-w-md mx-auto">
+                    <div className="flex items-center justify-center gap-3 mb-3">
+                      <Sparkles className="w-5 h-5 text-[var(--color-musio-red)] animate-pulse" />
+                      <span className="text-sm text-white/80">Generating your perfect rack...</span>
+                    </div>
+                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-[var(--color-musio-red)] to-[var(--color-musio-coral)] rounded-full animate-progress"
+                        style={{
+                          animation: 'progress 2s ease-in-out infinite',
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </section>
 

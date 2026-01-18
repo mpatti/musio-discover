@@ -422,3 +422,19 @@ input[type="range"]::-webkit-slider-thumb {
     rgba(0, 0, 0, 0.6) 100%
   );
 }
+
+/* Progress bar animation */
+@keyframes progress {
+  0% {
+    width: 0%;
+    margin-left: 0%;
+  }
+  50% {
+    width: 60%;
+    margin-left: 20%;
+  }
+  100% {
+    width: 0%;
+    margin-left: 100%;
+  }
+}
