@@ -36,8 +36,8 @@ const categoryGradients: Record<InstrumentCategory, string> = {
   guitars: 'linear-gradient(135deg, #654321 0%, #8B5A2B 50%, #A0522D 100%)',
   bass: 'linear-gradient(135deg, #191970 0%, #2F2F70 50%, #4B4B80 100%)',
   orchestral: 'linear-gradient(135deg, #2C1810 0%, #4A2C20 50%, #6B4030 100%)',
-  electronic: 'linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #2D3E50 100%)',
   fx: 'linear-gradient(135deg, #1A1A2E 0%, #2D2D44 50%, #3D3D5C 100%)',
+  other: 'linear-gradient(135deg, #333333 0%, #555555 50%, #777777 100%)',
 };
 
 // Musio Logo Component - uses the official PNG logo
@@ -434,8 +434,9 @@ export default function Home() {
                                           {instrument.category === 'world' && '🌍'}
                                           {instrument.category === 'guitars' && '🎸'}
                                           {instrument.category === 'bass' && '🎸'}
+                                          {instrument.category === 'orchestral' && '🎼'}
                                           {instrument.category === 'fx' && '✨'}
-                                          {instrument.category === 'electronic' && '💫'}
+                                          {instrument.category === 'other' && '🎵'}
                                         </span>
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-white/80">
                                           {instrument.category}

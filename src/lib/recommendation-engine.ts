@@ -76,7 +76,7 @@ const genreInstrumentWeights: Record<Genre, Partial<Record<InstrumentCategory, n
   cinematic: { orchestral: 2, strings: 2, brass: 2, percussion: 1.5, vocals: 1.5, synths: 1.2 },
   pop: { synths: 1.5, keyboards: 1.5, guitars: 1.3, bass: 1.3, percussion: 1.2 },
   rock: { guitars: 2, bass: 1.5, percussion: 1.5, keyboards: 1.2 },
-  electronic: { synths: 2, electronic: 2, bass: 1.5, percussion: 1.3 },
+  electronic: { synths: 2, keyboards: 2, bass: 1.5, percussion: 1.3 },
   jazz: { keyboards: 1.8, brass: 1.5, bass: 1.5, percussion: 1.3, woodwinds: 1.3 },
   classical: { strings: 2, woodwinds: 1.8, brass: 1.5, keyboards: 1.5, percussion: 1.2 },
   ambient: { synths: 2, strings: 1.5, vocals: 1.3, world: 1.3, fx: 1.5 },
@@ -85,7 +85,7 @@ const genreInstrumentWeights: Record<Genre, Partial<Record<InstrumentCategory, n
   world: { world: 2.5, percussion: 1.5, woodwinds: 1.5, strings: 1.3 },
   'r&b': { keyboards: 1.8, synths: 1.5, bass: 1.5, vocals: 1.3, guitars: 1.2 },
   indie: { guitars: 1.8, keyboards: 1.5, synths: 1.3, strings: 1.3 },
-  experimental: { electronic: 2, synths: 1.8, fx: 2, world: 1.5 },
+  experimental: { synths: 2, fx: 2, world: 1.5, percussion: 1.3 },
 };
 
 // Combo name templates
