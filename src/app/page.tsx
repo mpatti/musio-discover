@@ -280,7 +280,7 @@ export default function Home() {
             {/* Hero Section */}
             <section className="text-center py-10 mb-4">
               <h1 className="text-3xl font-bold">
-                Find Your Perfect Sound
+                Musio Rack Generator
               </h1>
             </section>
 
