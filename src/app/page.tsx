@@ -274,60 +274,96 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-6">
+      <main>
         {activeTab === 'discover' ? (
           <>
-            {/* Hero Section */}
-            <section className="text-center py-10 mb-4">
-              <h1 className="text-3xl font-bold">
-                Musio Rack Generator
-              </h1>
-            </section>
-
-            {/* Search Section */}
-            <section className="max-w-2xl mx-auto mb-8">
-              <div className="relative mb-4">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-text-muted)]" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
-                  placeholder="Describe your composition... (e.g., 'epic orchestral battle scene')"
-                  className="input-search w-full"
-                />
-                <button 
-                  onClick={() => handleGenerate()}
-                  disabled={isGenerating}
-                  className="btn-primary absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2"
-                >
-                  {isGenerating ? (
-                    <RefreshCw className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Wand2 className="w-4 h-4" />
-                  )}
-                  Generate
-                </button>
-              </div>
-
-              {/* Quick Prompts - simplified to 4 */}
-              <div className="flex flex-wrap justify-center gap-2">
-                {shuffledPrompts.slice(0, 4).map((prompt) => (
-                  <button
-                    key={prompt}
-                    onClick={() => {
-                      setSearchQuery(prompt);
-                      handleGenerate(prompt);
+            {/* Hero Section with Backdrop Mosaic */}
+            <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+              {/* Background Mosaic Grid */}
+              <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1 opacity-40">
+                {uniqueCollections.slice(0, 48).map((inst, idx) => (
+                  <div 
+                    key={inst.collectionSlug + idx}
+                    className="aspect-square relative overflow-hidden"
+                    style={{
+                      transform: `scale(${1 + (idx % 3) * 0.1})`,
+                      opacity: 0.6 + (idx % 4) * 0.1
                     }}
-                    className="chip"
                   >
-                    {prompt}
-                  </button>
+                    {inst.imageUrl ? (
+                      <img 
+                        src={inst.imageUrl}
+                        alt=""
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div 
+                        className="w-full h-full"
+                        style={{ background: categoryGradients[inst.category] }}
+                      />
+                    )}
+                  </div>
                 ))}
               </div>
+              
+              {/* Dark Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-[var(--color-bg-primary)]" />
+              
+              {/* Radial Gradient for Center Focus */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.7)_70%)]" />
+
+              {/* Content */}
+              <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
+                <h1 className="text-4xl md:text-5xl font-bold mb-8 tracking-tight">
+                  Musio Rack Generator
+                </h1>
+                
+                {/* Search Section */}
+                <div className="relative mb-6">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-text-muted)]" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
+                    placeholder="Describe your composition... (e.g., 'epic orchestral battle scene')"
+                    className="input-search w-full bg-black/50 backdrop-blur-md border-white/20"
+                  />
+                  <button 
+                    onClick={() => handleGenerate()}
+                    disabled={isGenerating}
+                    className="btn-primary absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2"
+                  >
+                    {isGenerating ? (
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Wand2 className="w-4 h-4" />
+                    )}
+                    Generate
+                  </button>
+                </div>
+
+                {/* Quick Prompts */}
+                <div className="flex flex-wrap justify-center gap-2">
+                  {shuffledPrompts.slice(0, 4).map((prompt) => (
+                    <button
+                      key={prompt}
+                      onClick={() => {
+                        setSearchQuery(prompt);
+                        handleGenerate(prompt);
+                      }}
+                      className="chip bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20"
+                    >
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </section>
 
-            {/* Results */}
+            {/* Results Section */}
+            <section className="max-w-7xl mx-auto px-6 py-6">
             <AnimatePresence mode="wait">
               {combos.length > 0 ? (
                 <motion.section
@@ -603,10 +639,11 @@ export default function Home() {
                 </motion.section>
               )}
             </AnimatePresence>
+            </section>
           </>
         ) : (
           /* Catalog Tab - Full Catalog View */
-          <section>
+          <section className="max-w-7xl mx-auto px-6 py-6">
             {/* Search */}
             <div className="max-w-md mx-auto mb-8">
               <div className="relative">
