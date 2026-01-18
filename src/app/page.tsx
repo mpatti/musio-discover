@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, 
@@ -61,6 +61,7 @@ export default function Home() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [palette, setPalette] = useState<Instrument[]>([]);
   const [catalogSearchQuery, setCatalogSearchQuery] = useState('');
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   // Quick prompts - expanded suggestions
   const allQuickPrompts = [
@@ -154,6 +155,10 @@ export default function Home() {
           setCombos(data.combos);
           setSelectedCombo(data.combos[0]);
           setIsGenerating(false);
+          // Scroll to results
+          setTimeout(() => {
+            resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
           return;
         }
       }
@@ -166,6 +171,10 @@ export default function Home() {
     setCombos(generatedCombos);
     setSelectedCombo(generatedCombos[0] || null);
     setIsGenerating(false);
+    // Scroll to results
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   const addToPalette = (instrument: Instrument) => {
@@ -323,7 +332,7 @@ export default function Home() {
             </section>
 
             {/* Results Section */}
-            <section className="max-w-7xl mx-auto px-6 py-6">
+            <section ref={resultsRef} className="max-w-7xl mx-auto px-6 py-6">
             <AnimatePresence mode="wait">
               {combos.length > 0 ? (
                 <motion.section
