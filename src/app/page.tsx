@@ -234,21 +234,21 @@ export default function Home() {
             >
               {/* Background Mosaic Grid - 3D Netflix style */}
               <div 
-                className="absolute grid grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2"
+                className="absolute grid grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3"
                 style={{
-                  top: '-50%',
-                  left: '-30%',
-                  right: '-30%',
-                  bottom: '-50%',
-                  transform: 'rotateX(15deg) rotateZ(-12deg) scale(1.5)',
+                  top: '-60%',
+                  left: '-40%',
+                  right: '-40%',
+                  bottom: '-60%',
+                  transform: 'rotateX(12deg) rotateZ(-10deg) scale(1.1)',
                   transformOrigin: 'center center',
                   transformStyle: 'preserve-3d',
                 }}
               >
-                {[...uniqueCollections, ...uniqueCollections, ...uniqueCollections].map((inst, idx) => (
+                {[...uniqueCollections, ...uniqueCollections, ...uniqueCollections, ...uniqueCollections].map((inst, idx) => (
                   <div 
                     key={inst.collectionSlug + idx}
-                    className="aspect-[2/3] relative"
+                    className="aspect-square relative"
                   >
                     {inst.imageUrl ? (
                       <img 
