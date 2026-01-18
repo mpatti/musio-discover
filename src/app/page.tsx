@@ -229,23 +229,33 @@ export default function Home() {
           <>
             {/* Hero Section with Backdrop Mosaic */}
             <section className="relative min-h-[calc(100vh-64px)] flex items-center justify-center overflow-hidden">
-              {/* Background Mosaic Grid */}
-              <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-0 blur-[2px]">
-                {uniqueCollections.map((inst, idx) => (
+              {/* Background Mosaic Grid - Angled like Netflix */}
+              <div 
+                className="absolute grid grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-1 blur-[1px]"
+                style={{
+                  top: '-20%',
+                  left: '-10%',
+                  right: '-10%',
+                  bottom: '-20%',
+                  transform: 'rotate(-10deg) scale(1.2)',
+                  transformOrigin: 'center center',
+                }}
+              >
+                {[...uniqueCollections, ...uniqueCollections].map((inst, idx) => (
                   <div 
                     key={inst.collectionSlug + idx}
-                    className="aspect-square relative"
+                    className="aspect-[2/3] relative"
                   >
                     {inst.imageUrl ? (
                       <img 
                         src={inst.imageUrl}
                         alt=""
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover rounded-sm"
                         loading="lazy"
                       />
                     ) : (
                       <div 
-                        className="w-full h-full"
+                        className="w-full h-full rounded-sm"
                         style={{ background: categoryGradients[inst.category] }}
                       />
                     )}
