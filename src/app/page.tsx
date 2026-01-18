@@ -234,7 +234,7 @@ export default function Home() {
             >
               {/* Background Mosaic Grid - 3D Netflix style */}
               <div 
-                className="absolute grid grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3"
+                className="absolute grid grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3 blur-[3px]"
                 style={{
                   top: '-60%',
                   left: '-40%',
