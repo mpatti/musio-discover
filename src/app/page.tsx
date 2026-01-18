@@ -296,7 +296,7 @@ export default function Home() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
-                    placeholder="Describe your composition... (e.g., 'epic orchestral battle scene')"
+                    placeholder="Describe your composition..."
                     className="input-search w-full bg-black/50 backdrop-blur-md border-white/20"
                   />
                   <button 
