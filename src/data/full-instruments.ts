@@ -72,6 +72,13 @@ function generateId(collection: string, instrument: string, articulation: string
 // All instruments data
 const instrumentsRaw = [
   {
+    "collection": "Piano in Blue",
+    "collectionSlug": "piano-in-blue",
+    "instrument": "Steinway D",
+    "articulation": "Concert Grand",
+    "fullName": "Piano in Blue - Steinway D - Concert Grand"
+  },
+  {
     "collection": "African Marimba",
     "collectionSlug": "african-marimba",
     "instrument": " African Marimba",
