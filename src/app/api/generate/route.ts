@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
-import { instruments, Instrument } from '@/data/all-instruments';
+import { instruments, Instrument } from '@/data/detailed-instruments';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,

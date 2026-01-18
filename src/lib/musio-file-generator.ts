@@ -1,7 +1,7 @@
 // Musio File Generator
 // Generates .musio rack files that can be loaded into the Musio plugin
 
-import { Instrument } from '@/data/all-instruments';
+import { Instrument } from '@/data/detailed-instruments';
 import { instrumentIdMappings } from '@/data/instrument-id-mappings';
 
 export interface MusioInstrumentConfig {

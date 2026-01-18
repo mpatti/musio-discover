@@ -15,7 +15,7 @@ import {
   catalogStats,
   Instrument,
   InstrumentCategory
-} from '@/data/all-instruments';
+} from '@/data/detailed-instruments';
 import { 
   quickRecommend, 
   Combo, 
