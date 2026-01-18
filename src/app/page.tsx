@@ -380,6 +380,15 @@ export default function Home() {
                               </div>
                             </div>
 
+                            {/* Download Button */}
+                            <button
+                              disabled
+                              className="btn-primary flex items-center gap-2 text-sm opacity-50 cursor-not-allowed mt-4"
+                              title="Coming soon"
+                            >
+                              Download Rack
+                            </button>
+
                             {/* Sonic Palette */}
                             <div className="mt-4">
                               <p className="text-xs text-[var(--color-text-muted)] mb-2">Sonic Palette</p>
@@ -686,6 +695,13 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-center gap-3">
+                  <button
+                    disabled
+                    className="btn-primary flex items-center gap-2 text-sm py-1.5 px-3 opacity-50 cursor-not-allowed"
+                    title="Coming soon"
+                  >
+                    Download Rack
+                  </button>
                   <button
                     onClick={() => setPalette([])}
                     className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
