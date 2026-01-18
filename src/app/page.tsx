@@ -178,41 +178,64 @@ export default function Home() {
     setPalette(palette.filter(i => i.id !== id));
   };
 
-  // Featured instruments for explore view - curated unique/creative instruments
-  const featuredInstrumentIds = [
-    'mister-rogers-celeste',        // Mister Rogers' Celeste
-    'cinelegacy-harp',              // CineLegacy: Harp
-    'create-series-toy-xylo',       // Create Series: Toy Xylo
-    'tongue-drum',                  // Tongue Drum
-    'create-series-kalimba',        // Kalimba
-    'accent-pianos',                // Accent Pianos
-    'twisted-psaltry-cinematic-fx', // Twisted Psaltry
-    'tonal-tickles',                // Tonal Tickles
-    'ancient-bones',                // Ancient Bones
+  // Featured instruments - find one from each collection slug
+  const featuredCollectionSlugs = [
+    'mister-rogers-celeste',
+    'cinelegacy-harp',
+    'create-series-toy-xylo',
+    'tongue-drum',
+    'create-series-kalimba',
+    'accent-pianos',
+    'twisted-psaltry-cinematic-fx',
+    'tonal-tickles',
+    'ancient-bones',
+    'cinestrings-core',
+    'cinebrass-pro',
+    'cinewinds-core',
   ];
-  const featuredInstruments = useMemo(() => 
-    featuredInstrumentIds
-      .map(id => instruments.find(i => i.id === id))
-      .filter(Boolean) as typeof instruments,
-    []
-  );
+  const featuredInstruments = useMemo(() => {
+    const seen = new Set<string>();
+    return featuredCollectionSlugs
+      .map(slug => instruments.find(i => i.collectionSlug === slug))
+      .filter((inst): inst is typeof instruments[0] => {
+        if (!inst || seen.has(inst.collectionSlug)) return false;
+        seen.add(inst.collectionSlug);
+        return true;
+      });
+  }, []);
   
-  // New Sounds from Cinesamples - specific instrument IDs to feature
+  // New Sounds from Cinesamples - one instrument per collection
   const newSoundsInstruments = useMemo(() => {
-    const ids = [
-      'south-african-voices-group',   // South African Choir
-      'south-african-voices-female',  // South African Female Choir  
-      'south-african-voices-male',    // South African Male Choir
-      'cinelegacy-harp',              // CineLegacy: Harp
-      'drum-machine-cr78',            // CR-78
-      'drum-machine-cr8000',          // CR-8000
-      'drum-machine-dmx',             // DMX
-      'drum-machine-sk1',             // SK-1
-      'drum-machine-tr606',           // TR-606
+    const slugs = [
+      'south-african-voices-group',
+      'south-african-voices-female',
+      'south-african-voices-male',
+      'cinelegacy-harp',
+      'drum-machine-cr78',
+      'drum-machine-cr8000',
+      'drum-machine-dmx',
+      'drum-machine-sk1',
+      'drum-machine-tr606',
+      'african-marimba',
     ];
-    return ids
-      .map(id => instruments.find(i => i.id === id))
-      .filter(Boolean) as typeof instruments;
+    const seen = new Set<string>();
+    return slugs
+      .map(slug => instruments.find(i => i.collectionSlug === slug))
+      .filter((inst): inst is typeof instruments[0] => {
+        if (!inst || seen.has(inst.collectionSlug)) return false;
+        seen.add(inst.collectionSlug);
+        return true;
+      });
+  }, []);
+
+  // Unique collections for catalog view (one per collectionSlug)
+  const uniqueCollections = useMemo(() => {
+    const seen = new Set<string>();
+    return instruments.filter(i => {
+      if (seen.has(i.collectionSlug)) return false;
+      seen.add(i.collectionSlug);
+      return true;
+    });
   }, []);
 
   return (
@@ -590,7 +613,7 @@ export default function Home() {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-text-muted)]" />
                 <input
                   type="text"
-                  placeholder="Search all 116 collections..."
+                  placeholder="Search all collections..."
                   value={catalogSearchQuery}
                   onChange={(e) => setCatalogSearchQuery(e.target.value)}
                   className="input-search w-full"
@@ -598,31 +621,32 @@ export default function Home() {
               </div>
               {catalogSearchQuery && (
                 <p className="text-center text-sm text-[var(--color-text-muted)] mt-2">
-                  Found {instruments.filter(i => 
-                    i.name.toLowerCase().includes(catalogSearchQuery.toLowerCase()) ||
-                    i.description.toLowerCase().includes(catalogSearchQuery.toLowerCase()) ||
+                  Found {uniqueCollections.filter(i => 
+                    i.collection.toLowerCase().includes(catalogSearchQuery.toLowerCase()) ||
+                    i.collectionSlug.toLowerCase().includes(catalogSearchQuery.toLowerCase()) ||
+                    i.category.toLowerCase().includes(catalogSearchQuery.toLowerCase()) ||
                     i.tags.some(t => t.toLowerCase().includes(catalogSearchQuery.toLowerCase()))
-                  ).length} results
+                  ).length} collections
                 </p>
               )}
             </div>
 
-            {/* All Instruments Grid - ALL 116 collections */}
+            {/* All Collections Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {instruments
+              {uniqueCollections
                 .filter(i => {
                   if (!catalogSearchQuery) return true;
                   const query = catalogSearchQuery.toLowerCase();
                   return (
-                    i.name.toLowerCase().includes(query) ||
-                    i.description.toLowerCase().includes(query) ||
+                    i.collection.toLowerCase().includes(query) ||
+                    i.collectionSlug.toLowerCase().includes(query) ||
                     i.category.toLowerCase().includes(query) ||
                     i.tags.some(t => t.toLowerCase().includes(query))
                   );
                 })
                 .map((instrument) => (
                 <div
-                  key={instrument.id}
+                  key={instrument.collectionSlug}
                   className="instrument-card group catalog-item"
                   onClick={() => addToPalette(instrument)}
                 >
@@ -633,7 +657,7 @@ export default function Home() {
                     {instrument.imageUrl && (
                       <img 
                         src={instrument.imageUrl} 
-                        alt={instrument.name}
+                        alt={instrument.collection}
                         loading="lazy"
                         className="absolute inset-0 w-full h-full object-cover"
                       />
@@ -641,14 +665,14 @@ export default function Home() {
                     {!instrument.imageUrl && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
                         <span className="cover-text text-xs leading-tight">
-                          {instrument.name.split(' ').slice(0, 2).join('\n')}
+                          {instrument.collection}
                         </span>
                       </div>
                     )}
                   </div>
                   <div className="info">
-                    <p className="title">{instrument.name}</p>
-                    <p className="subtitle">{instrument.collection}</p>
+                    <p className="title">{instrument.collection}</p>
+                    <p className="subtitle">{instrument.category}</p>
                   </div>
                 </div>
               ))}
