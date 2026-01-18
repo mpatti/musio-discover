@@ -20879,7 +20879,7 @@ export const instruments: Instrument[] = instrumentsRaw.map(i => {
 
 export const catalogStats = {
   totalInstruments: instruments.length,
-  collections: 89
+  collections: new Set(instruments.map(i => i.collectionSlug)).size
 };
 
 // Helper functions
