@@ -48,6 +48,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Prevent image flicker on Safari */
+img {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
 /* Custom scrollbar - Musio style */
 ::-webkit-scrollbar {
   width: 6px;

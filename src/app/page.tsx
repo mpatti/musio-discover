@@ -422,15 +422,17 @@ export default function Home() {
                                   {/* Cover */}
                                   <div 
                                     className="cover relative"
-                                    style={{ background: instrument.imageUrl ? undefined : categoryGradients[instrument.category] }}
+                                    style={{ background: categoryGradients[instrument.category] }}
                                   >
-                                    {instrument.imageUrl ? (
+                                    {instrument.imageUrl && (
                                       <img 
                                         src={instrument.imageUrl} 
                                         alt={instrument.name}
+                                        loading="eager"
                                         className="absolute inset-0 w-full h-full object-cover"
                                       />
-                                    ) : (
+                                    )}
+                                    {!instrument.imageUrl && (
                                       <div className="absolute inset-0 flex flex-col items-center justify-center p-3">
                                         <span className="text-3xl mb-2 opacity-90">
                                           {instrument.category === 'strings' && '🎻'}
@@ -512,15 +514,17 @@ export default function Home() {
                         >
                           <div 
                             className="cover relative"
-                            style={{ background: instrument.imageUrl ? undefined : categoryGradients[instrument.category] }}
+                            style={{ background: categoryGradients[instrument.category] }}
                           >
-                            {instrument.imageUrl ? (
+                            {instrument.imageUrl && (
                               <img 
                                 src={instrument.imageUrl} 
                                 alt={instrument.name}
+                                loading="eager"
                                 className="absolute inset-0 w-full h-full object-cover"
                               />
-                            ) : (
+                            )}
+                            {!instrument.imageUrl && (
                               <div className="absolute inset-0 flex flex-col items-center justify-center">
                                 <span className="cover-text text-base">{instrument.name.split(' ').slice(0, 2).join(' ')}</span>
                               </div>
@@ -550,15 +554,17 @@ export default function Home() {
                         >
                           <div 
                             className="cover"
-                            style={{ background: instrument.imageUrl ? undefined : categoryGradients[instrument.category] }}
+                            style={{ background: categoryGradients[instrument.category] }}
                           >
-                            {instrument.imageUrl ? (
+                            {instrument.imageUrl && (
                               <img 
                                 src={instrument.imageUrl} 
                                 alt={instrument.name}
+                                loading="eager"
                                 className="absolute inset-0 w-full h-full object-cover"
                               />
-                            ) : (
+                            )}
+                            {!instrument.imageUrl && (
                               <div className="absolute inset-0 flex items-center justify-center">
                                 <span className="cover-text text-xs">{instrument.name}</span>
                               </div>
@@ -626,15 +632,17 @@ export default function Home() {
                 >
                   <div 
                     className="cover relative"
-                    style={{ background: instrument.imageUrl ? undefined : categoryGradients[instrument.category] }}
+                    style={{ background: categoryGradients[instrument.category] }}
                   >
-                    {instrument.imageUrl ? (
+                    {instrument.imageUrl && (
                       <img 
                         src={instrument.imageUrl} 
                         alt={instrument.name}
+                        loading="lazy"
                         className="absolute inset-0 w-full h-full object-cover"
                       />
-                    ) : (
+                    )}
+                    {!instrument.imageUrl && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
                         <span className="cover-text text-xs leading-tight">
                           {instrument.name.split(' ').slice(0, 2).join('\n')}
