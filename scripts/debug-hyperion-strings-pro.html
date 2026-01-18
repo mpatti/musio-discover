@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Hyperion Strings Pro</title>
+        <link rel="stylesheet" href="static/index.css">
+        <link rel="icon" href="static/favicon.ico" />
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+      
+
+
+<div class="catalog-container">
+    
+        
+<div class="catalog-header">
+    
+        <script>
+    function redirect(){
+        window.location.href = '/'
+    }
+</script>
+<div class="back-button" onclick="redirect()">
+    <svg id='back-btn-edit-user'width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+</div>
+    
+    <h2></h2>
+    <div class="catalog-header-spacer"></div>
+    <!-- <form action="/search" method = "GET">
+        <div class="search-element">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.25 29.25C22.982 29.25 29.25 22.982 29.25 15.25C29.25 7.51801 22.982 1.25 15.25 1.25C7.51801 1.25 1.25 7.51801 1.25 15.25C1.25 22.982 7.51801 29.25 15.25 29.25Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M32.7492 32.7502L25.1367 25.1377" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>   
+            <input id="search-input"type="text" class="form-control" id="search-text" name="q" aria-describedby="search-text" placeholder="Search for...">
+        </div>
+    </form> -->
+</div>
+    
+    <script src="static/ogvjs-1.8.9/ogv.js"></script>
+    <div class="collection-header" style="background-image: linear-gradient(to bottom, rgba(19, 19, 19, 0.52), rgba(13, 12, 13, 0.852)), url(https://assets.mus.io/a457dd23b5ad89208ae82f83e0c8b11b225d68a56a57f09c03958f3b42096e28.png); background-repeat: no-repeat; background-size: cover; background-position: 50% 60%;">
+        <h1>Hyperion Strings Pro</h1>
+        <h2 class="subtext">Finely-crafted orchestral strings for everyone</h2>
+        <h3 class="subtext">Hyperion Strings is a orchestral string collection built for everyone. This finely-crafted virtual instrument has a present and robust sound unlike any other, with a rich full-bodied tone and wide dynamic range. The Pro collection presents extended techniques, effects and expressions.</h3>
+    </div>
+    <script>
+        let audioPlayer, audioElem, playNode, pauseNode, prevElementIdPlaying;
+
+        function collectionDetail(collection){
+            let slug = collection['collectionSlug']
+            window.location.href = '/' + slug
+        }
+        function ogvAudio(url){
+                let player = new OGVPlayer();
+                player.src = url;
+                return player;
+        }
+        function removeAllChildNodes(parent){
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+            return;
+        }
+        function createNodes(){
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+
+            pauseNode = document.createElement('p')
+            pauseNode.classList.add('fa')
+            pauseNode.classList.add('fa-pause-circle-o')
+            pauseNode.style['font-size'] = '24px'
+        }
+        function changeToOGVPlayer(previewUrl){
+            audioPlayer = ogvAudio(previewUrl)
+            audioPlayer.setAttribute('id', previewUrl )
+
+            audioPlayer.onended = function(){
+            let elem = document.getElementById('audio-preview-play-pause-' + previewUrl)
+            removeAllChildNodes(elem)
+            
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+            elem.appendChild(playNode)
+            }
+
+            audioElem = document.getElementById(previewUrl)
+            
+            if (audioElem){
+                audioElem.replaceWith(audioPlayer)
+            }
+            
+        }
+        function previewAudio(previewUrl){
+
+            let prevAudioPlaying = document.getElementById(prevElementIdPlaying)
+
+            if (prevAudioPlaying && (prevElementIdPlaying !== previewUrl)){
+                prevAudioPlaying.pause()
+                let prevAudioElem = document.getElementById('audio-preview-play-pause-'+prevElementIdPlaying)
+                removeAllChildNodes(prevAudioElem)
+                prevAudioElem.appendChild(playNode)
+            }
+            
+            let audio = document.getElementById(previewUrl)
+            let oldNode = document.getElementById('audio-preview-play-pause-'+ previewUrl)
+
+            if (audio.paused == true) {
+
+                audio.play();
+                prevElementIdPlaying = previewUrl
+                removeAllChildNodes(oldNode)
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(pauseNode)
+            
+            } else if (!audio.paused) {
+
+                audio.pause()
+                prevElementIdPlaying = ''
+                removeAllChildNodes(oldNode)
+                createNodes()
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(playNode)
+                
+            }
+        }
+        function loadOGVPlayer(previewUrl){
+            changeToOGVPlayer(previewUrl)
+            createNodes()
+        }
+
+        function checkForExistingOGVPlayer(previewUrl){
+            let element = document.getElementById(previewUrl)
+            if (element.nodeName.toString() == 'OGVJS'){
+                return true;
+            }
+            return false;
+        }
+
+    </script>
+
+    <div class="row-layout">
+        
+        <!-- just call below in main.py and pass info to collection_detail.html -->
+
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>2nd Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violas</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Cellos</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Basses</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/e04c181b8a4125931ad821e91e2d6bb07a1c97ad69d0c829dc3bf1a29d7897b9.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/e04c181b8a4125931ad821e91e2d6bb07a1c97ad69d0c829dc3bf1a29d7897b9.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/e04c181b8a4125931ad821e91e2d6bb07a1c97ad69d0c829dc3bf1a29d7897b9.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/e04c181b8a4125931ad821e91e2d6bb07a1c97ad69d0c829dc3bf1a29d7897b9.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/e04c181b8a4125931ad821e91e2d6bb07a1c97ad69d0c829dc3bf1a29d7897b9.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Harmonics  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/dce4ea71be0802e4952a7f05790b8dc97cc4683c5579df00dddd672e15ab3fb8.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/dce4ea71be0802e4952a7f05790b8dc97cc4683c5579df00dddd672e15ab3fb8.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/dce4ea71be0802e4952a7f05790b8dc97cc4683c5579df00dddd672e15ab3fb8.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/dce4ea71be0802e4952a7f05790b8dc97cc4683c5579df00dddd672e15ab3fb8.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/dce4ea71be0802e4952a7f05790b8dc97cc4683c5579df00dddd672e15ab3fb8.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Harmonics Staccato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/44ace9a46892cc433c1bb1e0b6d238d622a5f06a45ab38892c636efbd87a771a.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/44ace9a46892cc433c1bb1e0b6d238d622a5f06a45ab38892c636efbd87a771a.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/44ace9a46892cc433c1bb1e0b6d238d622a5f06a45ab38892c636efbd87a771a.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/44ace9a46892cc433c1bb1e0b6d238d622a5f06a45ab38892c636efbd87a771a.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/44ace9a46892cc433c1bb1e0b6d238d622a5f06a45ab38892c636efbd87a771a.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Flautando  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/846710b5b44623dfd362421bb2ec6c41c3d07cdc828ed95d5bc84588fabbf312.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/846710b5b44623dfd362421bb2ec6c41c3d07cdc828ed95d5bc84588fabbf312.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/846710b5b44623dfd362421bb2ec6c41c3d07cdc828ed95d5bc84588fabbf312.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/846710b5b44623dfd362421bb2ec6c41c3d07cdc828ed95d5bc84588fabbf312.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/846710b5b44623dfd362421bb2ec6c41c3d07cdc828ed95d5bc84588fabbf312.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Flautando Staccato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/4b55e3cd6554f4feb05b8f01677dc7db927a82eac1aa46bf553bd0d4733c796b.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/4b55e3cd6554f4feb05b8f01677dc7db927a82eac1aa46bf553bd0d4733c796b.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/4b55e3cd6554f4feb05b8f01677dc7db927a82eac1aa46bf553bd0d4733c796b.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/4b55e3cd6554f4feb05b8f01677dc7db927a82eac1aa46bf553bd0d4733c796b.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/4b55e3cd6554f4feb05b8f01677dc7db927a82eac1aa46bf553bd0d4733c796b.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Silent Sustain  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/2688e381f79c73e33f876918630c5a448a3ed0f1687a2156ff59a186e92f949f.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/2688e381f79c73e33f876918630c5a448a3ed0f1687a2156ff59a186e92f949f.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/2688e381f79c73e33f876918630c5a448a3ed0f1687a2156ff59a186e92f949f.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/2688e381f79c73e33f876918630c5a448a3ed0f1687a2156ff59a186e92f949f.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/2688e381f79c73e33f876918630c5a448a3ed0f1687a2156ff59a186e92f949f.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Ponticello Staccato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/650e5509dd0d369bb125ab33ab5ecec2753f5c9a402426816c45c91b28c29048.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/650e5509dd0d369bb125ab33ab5ecec2753f5c9a402426816c45c91b28c29048.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/650e5509dd0d369bb125ab33ab5ecec2753f5c9a402426816c45c91b28c29048.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/650e5509dd0d369bb125ab33ab5ecec2753f5c9a402426816c45c91b28c29048.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/650e5509dd0d369bb125ab33ab5ecec2753f5c9a402426816c45c91b28c29048.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Ponticello Sustain  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/2ffe1d4be39c22f479efbcc8a7c5f48177ce2dc4044cf6dde0a36c21beafa849.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/2ffe1d4be39c22f479efbcc8a7c5f48177ce2dc4044cf6dde0a36c21beafa849.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/2ffe1d4be39c22f479efbcc8a7c5f48177ce2dc4044cf6dde0a36c21beafa849.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/2ffe1d4be39c22f479efbcc8a7c5f48177ce2dc4044cf6dde0a36c21beafa849.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/2ffe1d4be39c22f479efbcc8a7c5f48177ce2dc4044cf6dde0a36c21beafa849.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Ricochet 1  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/69583c0b46ec1681adc0427ef37cef434694efd1eb89d9e5be001466df3597b1.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/69583c0b46ec1681adc0427ef37cef434694efd1eb89d9e5be001466df3597b1.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/69583c0b46ec1681adc0427ef37cef434694efd1eb89d9e5be001466df3597b1.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/69583c0b46ec1681adc0427ef37cef434694efd1eb89d9e5be001466df3597b1.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/69583c0b46ec1681adc0427ef37cef434694efd1eb89d9e5be001466df3597b1.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Ricochet 2  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/b4e5673d6b3f4138d0b6e8a0fce617f0adb9866ad6f7fdd852411d41b3377025.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/b4e5673d6b3f4138d0b6e8a0fce617f0adb9866ad6f7fdd852411d41b3377025.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/b4e5673d6b3f4138d0b6e8a0fce617f0adb9866ad6f7fdd852411d41b3377025.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/b4e5673d6b3f4138d0b6e8a0fce617f0adb9866ad6f7fdd852411d41b3377025.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/b4e5673d6b3f4138d0b6e8a0fce617f0adb9866ad6f7fdd852411d41b3377025.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Ricochet 3  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/92e20e36cb1728adf2073d6d28c0058de8ac8bfd0fb7c3cb9cb198f1e6007723.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/92e20e36cb1728adf2073d6d28c0058de8ac8bfd0fb7c3cb9cb198f1e6007723.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/92e20e36cb1728adf2073d6d28c0058de8ac8bfd0fb7c3cb9cb198f1e6007723.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/92e20e36cb1728adf2073d6d28c0058de8ac8bfd0fb7c3cb9cb198f1e6007723.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/92e20e36cb1728adf2073d6d28c0058de8ac8bfd0fb7c3cb9cb198f1e6007723.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Ricochet Drop  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/0d62690d46183f441c4137a9b7073361c4030e6a0ab79f82a35063e0d9adb0a5.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/0d62690d46183f441c4137a9b7073361c4030e6a0ab79f82a35063e0d9adb0a5.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/0d62690d46183f441c4137a9b7073361c4030e6a0ab79f82a35063e0d9adb0a5.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/0d62690d46183f441c4137a9b7073361c4030e6a0ab79f82a35063e0d9adb0a5.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/0d62690d46183f441c4137a9b7073361c4030e6a0ab79f82a35063e0d9adb0a5.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Fingers  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/297bc79f272f3e4c14550e599eccc268c0713e712784331d76bb2c117ee044fb.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/297bc79f272f3e4c14550e599eccc268c0713e712784331d76bb2c117ee044fb.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/297bc79f272f3e4c14550e599eccc268c0713e712784331d76bb2c117ee044fb.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/297bc79f272f3e4c14550e599eccc268c0713e712784331d76bb2c117ee044fb.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/297bc79f272f3e4c14550e599eccc268c0713e712784331d76bb2c117ee044fb.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Bridge Sustain  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/af71bc74538f7603a0fcb638fa4a6a013596a064a94a58cf7f4bcb62c5cedefa.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/af71bc74538f7603a0fcb638fa4a6a013596a064a94a58cf7f4bcb62c5cedefa.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/af71bc74538f7603a0fcb638fa4a6a013596a064a94a58cf7f4bcb62c5cedefa.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/af71bc74538f7603a0fcb638fa4a6a013596a064a94a58cf7f4bcb62c5cedefa.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/af71bc74538f7603a0fcb638fa4a6a013596a064a94a58cf7f4bcb62c5cedefa.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX On-Bridge Staccato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/3f0b6920c831a0a6e95227ecc6e5684ff1636a8c920002c79eaeedb796c6eada.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/3f0b6920c831a0a6e95227ecc6e5684ff1636a8c920002c79eaeedb796c6eada.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/3f0b6920c831a0a6e95227ecc6e5684ff1636a8c920002c79eaeedb796c6eada.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/3f0b6920c831a0a6e95227ecc6e5684ff1636a8c920002c79eaeedb796c6eada.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/3f0b6920c831a0a6e95227ecc6e5684ff1636a8c920002c79eaeedb796c6eada.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Behind-Bridge Staccato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/beeef99aaa061a19ced39b95f8737d5b5d3e75a27bdb3ba1e60994db00d46fd0.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/beeef99aaa061a19ced39b95f8737d5b5d3e75a27bdb3ba1e60994db00d46fd0.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/beeef99aaa061a19ced39b95f8737d5b5d3e75a27bdb3ba1e60994db00d46fd0.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/beeef99aaa061a19ced39b95f8737d5b5d3e75a27bdb3ba1e60994db00d46fd0.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/beeef99aaa061a19ced39b95f8737d5b5d3e75a27bdb3ba1e60994db00d46fd0.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Bridge Pluck  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/c23f3375f3705378803a37a523ecea4f440eee6a8454c8d8834f31fe112ab4f8.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/c23f3375f3705378803a37a523ecea4f440eee6a8454c8d8834f31fe112ab4f8.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/c23f3375f3705378803a37a523ecea4f440eee6a8454c8d8834f31fe112ab4f8.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/c23f3375f3705378803a37a523ecea4f440eee6a8454c8d8834f31fe112ab4f8.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/c23f3375f3705378803a37a523ecea4f440eee6a8454c8d8834f31fe112ab4f8.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Cluster Skitter  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/ce8bfc367a32b6f65e00fb1567566dd34f2348c2663df154bbcfe8420e7f7415.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/ce8bfc367a32b6f65e00fb1567566dd34f2348c2663df154bbcfe8420e7f7415.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/ce8bfc367a32b6f65e00fb1567566dd34f2348c2663df154bbcfe8420e7f7415.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/ce8bfc367a32b6f65e00fb1567566dd34f2348c2663df154bbcfe8420e7f7415.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/ce8bfc367a32b6f65e00fb1567566dd34f2348c2663df154bbcfe8420e7f7415.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Cluster Slide  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/0fa1daa6108509d347ad8d0acd3c4b0d89fd727c49b5209bb86d99dd3f7809eb.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/0fa1daa6108509d347ad8d0acd3c4b0d89fd727c49b5209bb86d99dd3f7809eb.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/0fa1daa6108509d347ad8d0acd3c4b0d89fd727c49b5209bb86d99dd3f7809eb.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/ee383253de1733dd663794496786a3c381809bf67beba126012643ddb3afd77f.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/0fa1daa6108509d347ad8d0acd3c4b0d89fd727c49b5209bb86d99dd3f7809eb.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/0fa1daa6108509d347ad8d0acd3c4b0d89fd727c49b5209bb86d99dd3f7809eb.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>1st Violins</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">FX Cluster Slide Down  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-

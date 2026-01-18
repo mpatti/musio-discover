@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>CineStrings - Solo</title>
+        <link rel="stylesheet" href="static/index.css">
+        <link rel="icon" href="static/favicon.ico" />
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+      
+
+
+<div class="catalog-container">
+    
+        
+<div class="catalog-header">
+    
+        <script>
+    function redirect(){
+        window.location.href = '/'
+    }
+</script>
+<div class="back-button" onclick="redirect()">
+    <svg id='back-btn-edit-user'width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+</div>
+    
+    <h2></h2>
+    <div class="catalog-header-spacer"></div>
+    <!-- <form action="/search" method = "GET">
+        <div class="search-element">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.25 29.25C22.982 29.25 29.25 22.982 29.25 15.25C29.25 7.51801 22.982 1.25 15.25 1.25C7.51801 1.25 1.25 7.51801 1.25 15.25C1.25 22.982 7.51801 29.25 15.25 29.25Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M32.7492 32.7502L25.1367 25.1377" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>   
+            <input id="search-input"type="text" class="form-control" id="search-text" name="q" aria-describedby="search-text" placeholder="Search for...">
+        </div>
+    </form> -->
+</div>
+    
+    <script src="static/ogvjs-1.8.9/ogv.js"></script>
+    <div class="collection-header" style="background-image: linear-gradient(to bottom, rgba(19, 19, 19, 0.52), rgba(13, 12, 13, 0.852)), url(https://assets.mus.io/7fe7254953c808f809ccddfc446f0df2b657098076830e9c8ed7271a1cb51371.png); background-repeat: no-repeat; background-size: cover; background-position: 50% 60%;">
+        <h1>CineStrings - Solo</h1>
+        <h2 class="subtext">Solo Strings</h2>
+        <h3 class="subtext">Recorded at MGM Scoring Scoring Stage at Sony Pictures Studios in Los Angeles, CineStrings Solo gives you all the tools to create independent string sections to score any scene. </h3>
+    </div>
+    <script>
+        let audioPlayer, audioElem, playNode, pauseNode, prevElementIdPlaying;
+
+        function collectionDetail(collection){
+            let slug = collection['collectionSlug']
+            window.location.href = '/' + slug
+        }
+        function ogvAudio(url){
+                let player = new OGVPlayer();
+                player.src = url;
+                return player;
+        }
+        function removeAllChildNodes(parent){
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+            return;
+        }
+        function createNodes(){
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+
+            pauseNode = document.createElement('p')
+            pauseNode.classList.add('fa')
+            pauseNode.classList.add('fa-pause-circle-o')
+            pauseNode.style['font-size'] = '24px'
+        }
+        function changeToOGVPlayer(previewUrl){
+            audioPlayer = ogvAudio(previewUrl)
+            audioPlayer.setAttribute('id', previewUrl )
+
+            audioPlayer.onended = function(){
+            let elem = document.getElementById('audio-preview-play-pause-' + previewUrl)
+            removeAllChildNodes(elem)
+            
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+            elem.appendChild(playNode)
+            }
+
+            audioElem = document.getElementById(previewUrl)
+            
+            if (audioElem){
+                audioElem.replaceWith(audioPlayer)
+            }
+            
+        }
+        function previewAudio(previewUrl){
+
+            let prevAudioPlaying = document.getElementById(prevElementIdPlaying)
+
+            if (prevAudioPlaying && (prevElementIdPlaying !== previewUrl)){
+                prevAudioPlaying.pause()
+                let prevAudioElem = document.getElementById('audio-preview-play-pause-'+prevElementIdPlaying)
+                removeAllChildNodes(prevAudioElem)
+                prevAudioElem.appendChild(playNode)
+            }
+            
+            let audio = document.getElementById(previewUrl)
+            let oldNode = document.getElementById('audio-preview-play-pause-'+ previewUrl)
+
+            if (audio.paused == true) {
+
+                audio.play();
+                prevElementIdPlaying = previewUrl
+                removeAllChildNodes(oldNode)
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(pauseNode)
+            
+            } else if (!audio.paused) {
+
+                audio.pause()
+                prevElementIdPlaying = ''
+                removeAllChildNodes(oldNode)
+                createNodes()
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(playNode)
+                
+            }
+        }
+        function loadOGVPlayer(previewUrl){
+            changeToOGVPlayer(previewUrl)
+            createNodes()
+        }
+
+        function checkForExistingOGVPlayer(previewUrl){
+            let element = document.getElementById(previewUrl)
+            if (element.nodeName.toString() == 'OGVJS'){
+                return true;
+            }
+            return false;
+        }
+
+    </script>
+
+    <div class="row-layout">
+        
+        <!-- just call below in main.py and pass info to collection_detail.html -->
+
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin II</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Viola</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Cello</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bass</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Chamber Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Performance Legato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin II</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Performance Legato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Viola</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Performance Legato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Cello</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Performance Legato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bass</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Performance Legato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/973d5454b40314fcb984e6ea690cee682910432e4d984b3d3c8585f10cb2b19e.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/973d5454b40314fcb984e6ea690cee682910432e4d984b3d3c8585f10cb2b19e.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/973d5454b40314fcb984e6ea690cee682910432e4d984b3d3c8585f10cb2b19e.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/973d5454b40314fcb984e6ea690cee682910432e4d984b3d3c8585f10cb2b19e.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/973d5454b40314fcb984e6ea690cee682910432e4d984b3d3c8585f10cb2b19e.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Legato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/d4c2e9b5d2d146a5dfcd3a237dae675dacde22dababc03654531c1ed77c9f484.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/d4c2e9b5d2d146a5dfcd3a237dae675dacde22dababc03654531c1ed77c9f484.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/d4c2e9b5d2d146a5dfcd3a237dae675dacde22dababc03654531c1ed77c9f484.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/d4c2e9b5d2d146a5dfcd3a237dae675dacde22dababc03654531c1ed77c9f484.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/d4c2e9b5d2d146a5dfcd3a237dae675dacde22dababc03654531c1ed77c9f484.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Legato | Espressivo </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/0e60e76c088dcd73be36a23a961ceae7b3deaeb30966dd28c03ae37b5685238d.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/0e60e76c088dcd73be36a23a961ceae7b3deaeb30966dd28c03ae37b5685238d.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/0e60e76c088dcd73be36a23a961ceae7b3deaeb30966dd28c03ae37b5685238d.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/0e60e76c088dcd73be36a23a961ceae7b3deaeb30966dd28c03ae37b5685238d.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/0e60e76c088dcd73be36a23a961ceae7b3deaeb30966dd28c03ae37b5685238d.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/f4b1f28461579ccf59b8cc39d7782848dbfcd8e6b487b83e6ab2a060b1cd4e4f.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/f4b1f28461579ccf59b8cc39d7782848dbfcd8e6b487b83e6ab2a060b1cd4e4f.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/f4b1f28461579ccf59b8cc39d7782848dbfcd8e6b487b83e6ab2a060b1cd4e4f.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/f4b1f28461579ccf59b8cc39d7782848dbfcd8e6b487b83e6ab2a060b1cd4e4f.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/f4b1f28461579ccf59b8cc39d7782848dbfcd8e6b487b83e6ab2a060b1cd4e4f.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain | Espressivo </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/59a3ea4652812f37679e126a272f3a130f514f58e627e2443d07283ca4babead.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/59a3ea4652812f37679e126a272f3a130f514f58e627e2443d07283ca4babead.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/59a3ea4652812f37679e126a272f3a130f514f58e627e2443d07283ca4babead.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/59a3ea4652812f37679e126a272f3a130f514f58e627e2443d07283ca4babead.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/59a3ea4652812f37679e126a272f3a130f514f58e627e2443d07283ca4babead.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain | Infinite Bow </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/f950fdca4ced044c9e316d6506163075d766d69968e844b35e60e53d0075428b.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/f950fdca4ced044c9e316d6506163075d766d69968e844b35e60e53d0075428b.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/f950fdca4ced044c9e316d6506163075d766d69968e844b35e60e53d0075428b.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/f950fdca4ced044c9e316d6506163075d766d69968e844b35e60e53d0075428b.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/f950fdca4ced044c9e316d6506163075d766d69968e844b35e60e53d0075428b.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Tremolo </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/361ef6ca95e50e1db5eb755b91ab0ffc1f8865bdd4cc6727fdcd80163f086292.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/361ef6ca95e50e1db5eb755b91ab0ffc1f8865bdd4cc6727fdcd80163f086292.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/361ef6ca95e50e1db5eb755b91ab0ffc1f8865bdd4cc6727fdcd80163f086292.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/361ef6ca95e50e1db5eb755b91ab0ffc1f8865bdd4cc6727fdcd80163f086292.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/361ef6ca95e50e1db5eb755b91ab0ffc1f8865bdd4cc6727fdcd80163f086292.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Marcato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/2d8a5411883eb82871fecf2294f719e25f87b5cec3e28708d11f76e0c8ebc883.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/2d8a5411883eb82871fecf2294f719e25f87b5cec3e28708d11f76e0c8ebc883.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/2d8a5411883eb82871fecf2294f719e25f87b5cec3e28708d11f76e0c8ebc883.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/2d8a5411883eb82871fecf2294f719e25f87b5cec3e28708d11f76e0c8ebc883.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/2d8a5411883eb82871fecf2294f719e25f87b5cec3e28708d11f76e0c8ebc883.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Staccato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/06a961cf09dd23217c32e9e934e6bbf84749a9de070490f3fac47c8a3009d119.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/06a961cf09dd23217c32e9e934e6bbf84749a9de070490f3fac47c8a3009d119.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/06a961cf09dd23217c32e9e934e6bbf84749a9de070490f3fac47c8a3009d119.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/06a961cf09dd23217c32e9e934e6bbf84749a9de070490f3fac47c8a3009d119.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/06a961cf09dd23217c32e9e934e6bbf84749a9de070490f3fac47c8a3009d119.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Spiccato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/d9126151f9ee1ee5a6a87694ce4ae490daa1c3651f2d408e5845a79483bdce3a.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/d9126151f9ee1ee5a6a87694ce4ae490daa1c3651f2d408e5845a79483bdce3a.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/d9126151f9ee1ee5a6a87694ce4ae490daa1c3651f2d408e5845a79483bdce3a.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/d9126151f9ee1ee5a6a87694ce4ae490daa1c3651f2d408e5845a79483bdce3a.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/d9126151f9ee1ee5a6a87694ce4ae490daa1c3651f2d408e5845a79483bdce3a.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Short Spiccato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/1906487064de95ad51f7aadf795099e24c441207dd75e639616e3f02f1a9255b.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/1906487064de95ad51f7aadf795099e24c441207dd75e639616e3f02f1a9255b.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/1906487064de95ad51f7aadf795099e24c441207dd75e639616e3f02f1a9255b.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/1906487064de95ad51f7aadf795099e24c441207dd75e639616e3f02f1a9255b.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/1906487064de95ad51f7aadf795099e24c441207dd75e639616e3f02f1a9255b.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin I</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Pizzicato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/4578edb12f23bf2e3348433dbb1b5f81ff64dca19b5246d60f4c2dc50635eaab.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/4578edb12f23bf2e3348433dbb1b5f81ff64dca19b5246d60f4c2dc50635eaab.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/4578edb12f23bf2e3348433dbb1b5f81ff64dca19b5246d60f4c2dc50635eaab.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/4578edb12f23bf2e3348433dbb1b5f81ff64dca19b5246d60f4c2dc50635eaab.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/4578edb12f23bf2e3348433dbb1b5f81ff64dca19b5246d60f4c2dc50635eaab.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin II</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Legato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/7f593ab68dcc1e4876f506a4bb942fe402cd74f37b6f27b0ffbe4ad362a92a00.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/7f593ab68dcc1e4876f506a4bb942fe402cd74f37b6f27b0ffbe4ad362a92a00.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/7f593ab68dcc1e4876f506a4bb942fe402cd74f37b6f27b0ffbe4ad362a92a00.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/7f593ab68dcc1e4876f506a4bb942fe402cd74f37b6f27b0ffbe4ad362a92a00.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/7f593ab68dcc1e4876f506a4bb942fe402cd74f37b6f27b0ffbe4ad362a92a00.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin II</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Legato | Espressivo </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/dc48a984bef5b01b12488bc233e0e213de8b8e5ad212ce8ee5afd5c1046ed4e6.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/dc48a984bef5b01b12488bc233e0e213de8b8e5ad212ce8ee5afd5c1046ed4e6.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/dc48a984bef5b01b12488bc233e0e213de8b8e5ad212ce8ee5afd5c1046ed4e6.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/dc48a984bef5b01b12488bc233e0e213de8b8e5ad212ce8ee5afd5c1046ed4e6.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/dc48a984bef5b01b12488bc233e0e213de8b8e5ad212ce8ee5afd5c1046ed4e6.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin II</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/ad73c111cfb711cb361843a3ede143892b8d28968c3a4120b8ec6767415888c9.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/ad73c111cfb711cb361843a3ede143892b8d28968c3a4120b8ec6767415888c9.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/ad73c111cfb711cb361843a3ede143892b8d28968c3a4120b8ec6767415888c9.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/ad73c111cfb711cb361843a3ede143892b8d28968c3a4120b8ec6767415888c9.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/ad73c111cfb711cb361843a3ede143892b8d28968c3a4120b8ec6767415888c9.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin II</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain | Espressivo </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/41e315ce5ecd5319486fac3bf1ad1f1129b7ee607908e2da2356d43a141f674d.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/41e315ce5ecd5319486fac3bf1ad1f1129b7ee607908e2da2356d43a141f674d.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/41e315ce5ecd5319486fac3bf1ad1f1129b7ee607908e2da2356d43a141f674d.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/32b69e3c5b5dd013ebf20185718a4ce472002a9e8fe04b789fa46964ff242039.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/41e315ce5ecd5319486fac3bf1ad1f1129b7ee607908e2da2356d43a141f674d.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/41e315ce5ecd5319486fac3bf1ad1f1129b7ee607908e2da2356d43a141f674d.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Violin II</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain | Infinite Bow </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/815d07786ce9142e93999d6061ed8f080117ac36dc7c3abe8c200bb7c74121c4.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/815d07786ce9142e93999d6061e

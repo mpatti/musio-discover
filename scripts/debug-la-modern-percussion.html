@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>LA Modern Percussion</title>
+        <link rel="stylesheet" href="static/index.css">
+        <link rel="icon" href="static/favicon.ico" />
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+      
+
+
+<div class="catalog-container">
+    
+        
+<div class="catalog-header">
+    
+        <script>
+    function redirect(){
+        window.location.href = '/'
+    }
+</script>
+<div class="back-button" onclick="redirect()">
+    <svg id='back-btn-edit-user'width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+</div>
+    
+    <h2></h2>
+    <div class="catalog-header-spacer"></div>
+    <!-- <form action="/search" method = "GET">
+        <div class="search-element">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.25 29.25C22.982 29.25 29.25 22.982 29.25 15.25C29.25 7.51801 22.982 1.25 15.25 1.25C7.51801 1.25 1.25 7.51801 1.25 15.25C1.25 22.982 7.51801 29.25 15.25 29.25Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M32.7492 32.7502L25.1367 25.1377" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>   
+            <input id="search-input"type="text" class="form-control" id="search-text" name="q" aria-describedby="search-text" placeholder="Search for...">
+        </div>
+    </form> -->
+</div>
+    
+    <script src="static/ogvjs-1.8.9/ogv.js"></script>
+    <div class="collection-header" style="background-image: linear-gradient(to bottom, rgba(19, 19, 19, 0.52), rgba(13, 12, 13, 0.852)), url(https://assets.mus.io/f2cd859724340244cfaae4ed053a53c7d4cdb1b04a2d801e6c224eea79e12616.png); background-repeat: no-repeat; background-size: cover; background-position: 50% 60%;">
+        <h1>LA Modern Percussion</h1>
+        <h2 class="subtext">Iconic Blockbuster Percussion</h2>
+        <h3 class="subtext">LA Modern Percussion is the definitive blockbuster percussion collection. Recorded &amp; mixed by mixing legend Alan Meyerson at Warner Bros Eastwood Stage, the drums were produced exactly the way they are on the high budget film score projects he works on. LA Modern Percussion was designed to be sculpted, processed, &amp; layered into larger than life, fully produced drum ensembles.</h3>
+    </div>
+    <script>
+        let audioPlayer, audioElem, playNode, pauseNode, prevElementIdPlaying;
+
+        function collectionDetail(collection){
+            let slug = collection['collectionSlug']
+            window.location.href = '/' + slug
+        }
+        function ogvAudio(url){
+                let player = new OGVPlayer();
+                player.src = url;
+                return player;
+        }
+        function removeAllChildNodes(parent){
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+            return;
+        }
+        function createNodes(){
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+
+            pauseNode = document.createElement('p')
+            pauseNode.classList.add('fa')
+            pauseNode.classList.add('fa-pause-circle-o')
+            pauseNode.style['font-size'] = '24px'
+        }
+        function changeToOGVPlayer(previewUrl){
+            audioPlayer = ogvAudio(previewUrl)
+            audioPlayer.setAttribute('id', previewUrl )
+
+            audioPlayer.onended = function(){
+            let elem = document.getElementById('audio-preview-play-pause-' + previewUrl)
+            removeAllChildNodes(elem)
+            
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+            elem.appendChild(playNode)
+            }
+
+            audioElem = document.getElementById(previewUrl)
+            
+            if (audioElem){
+                audioElem.replaceWith(audioPlayer)
+            }
+            
+        }
+        function previewAudio(previewUrl){
+
+            let prevAudioPlaying = document.getElementById(prevElementIdPlaying)
+
+            if (prevAudioPlaying && (prevElementIdPlaying !== previewUrl)){
+                prevAudioPlaying.pause()
+                let prevAudioElem = document.getElementById('audio-preview-play-pause-'+prevElementIdPlaying)
+                removeAllChildNodes(prevAudioElem)
+                prevAudioElem.appendChild(playNode)
+            }
+            
+            let audio = document.getElementById(previewUrl)
+            let oldNode = document.getElementById('audio-preview-play-pause-'+ previewUrl)
+
+            if (audio.paused == true) {
+
+                audio.play();
+                prevElementIdPlaying = previewUrl
+                removeAllChildNodes(oldNode)
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(pauseNode)
+            
+            } else if (!audio.paused) {
+
+                audio.pause()
+                prevElementIdPlaying = ''
+                removeAllChildNodes(oldNode)
+                createNodes()
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(playNode)
+                
+            }
+        }
+        function loadOGVPlayer(previewUrl){
+            changeToOGVPlayer(previewUrl)
+            createNodes()
+        }
+
+        function checkForExistingOGVPlayer(previewUrl){
+            let element = document.getElementById(previewUrl)
+            if (element.nodeName.toString() == 'OGVJS'){
+                return true;
+            }
+            return false;
+        }
+
+    </script>
+
+    <div class="row-layout">
+        
+        <!-- just call below in main.py and pass info to collection_detail.html -->
+
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/ea531c702b70e9ac38d1219e82c13790dc1394b2b550d10e436eba232c9726db.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/ea531c702b70e9ac38d1219e82c13790dc1394b2b550d10e436eba232c9726db.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/ea531c702b70e9ac38d1219e82c13790dc1394b2b550d10e436eba232c9726db.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/ea531c702b70e9ac38d1219e82c13790dc1394b2b550d10e436eba232c9726db.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/ea531c702b70e9ac38d1219e82c13790dc1394b2b550d10e436eba232c9726db.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Ethnic Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/5c4c5ea0c2a5bf3559bab6c43638f07db485db1fcd77528787a05dc03aa368a4.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/5c4c5ea0c2a5bf3559bab6c43638f07db485db1fcd77528787a05dc03aa368a4.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/5c4c5ea0c2a5bf3559bab6c43638f07db485db1fcd77528787a05dc03aa368a4.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/5c4c5ea0c2a5bf3559bab6c43638f07db485db1fcd77528787a05dc03aa368a4.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/5c4c5ea0c2a5bf3559bab6c43638f07db485db1fcd77528787a05dc03aa368a4.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Ethnic Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Standard Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/5cba5a2d00d2d30aac2b2ad80560628efa5b99c44b0b1c8d0aa95b5dfadfa85f.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/5cba5a2d00d2d30aac2b2ad80560628efa5b99c44b0b1c8d0aa95b5dfadfa85f.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/5cba5a2d00d2d30aac2b2ad80560628efa5b99c44b0b1c8d0aa95b5dfadfa85f.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/5cba5a2d00d2d30aac2b2ad80560628efa5b99c44b0b1c8d0aa95b5dfadfa85f.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/5cba5a2d00d2d30aac2b2ad80560628efa5b99c44b0b1c8d0aa95b5dfadfa85f.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Orchestral Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Standard Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/db268accebf0c800cfbd307e0d8f9925d792649b42054efb5d2c5e9549b2fdbf.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/db268accebf0c800cfbd307e0d8f9925d792649b42054efb5d2c5e9549b2fdbf.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/db268accebf0c800cfbd307e0d8f9925d792649b42054efb5d2c5e9549b2fdbf.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/db268accebf0c800cfbd307e0d8f9925d792649b42054efb5d2c5e9549b2fdbf.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/db268accebf0c800cfbd307e0d8f9925d792649b42054efb5d2c5e9549b2fdbf.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Orchestral Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Standard Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/1b1bb0610adb687d1a6182503aacc8770ed1edc1e3cb6679cf5631268edd84c6.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/1b1bb0610adb687d1a6182503aacc8770ed1edc1e3cb6679cf5631268edd84c6.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/1b1bb0610adb687d1a6182503aacc8770ed1edc1e3cb6679cf5631268edd84c6.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/1b1bb0610adb687d1a6182503aacc8770ed1edc1e3cb6679cf5631268edd84c6.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/1b1bb0610adb687d1a6182503aacc8770ed1edc1e3cb6679cf5631268edd84c6.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Taikos Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Standard Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/53c153f56b713ccbb2add9a935536ad56f1e9f408319fb9e2c1f80154fe9b5f0.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/53c153f56b713ccbb2add9a935536ad56f1e9f408319fb9e2c1f80154fe9b5f0.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/53c153f56b713ccbb2add9a935536ad56f1e9f408319fb9e2c1f80154fe9b5f0.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/53c153f56b713ccbb2add9a935536ad56f1e9f408319fb9e2c1f80154fe9b5f0.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/53c153f56b713ccbb2add9a935536ad56f1e9f408319fb9e2c1f80154fe9b5f0.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Taikos Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Standard Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/2eaa55096fbecbc20fa684f9e2f713d5db710cfe6f824c2778fdeabf6538acb7.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/2eaa55096fbecbc20fa684f9e2f713d5db710cfe6f824c2778fdeabf6538acb7.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/2eaa55096fbecbc20fa684f9e2f713d5db710cfe6f824c2778fdeabf6538acb7.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/2eaa55096fbecbc20fa684f9e2f713d5db710cfe6f824c2778fdeabf6538acb7.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/2eaa55096fbecbc20fa684f9e2f713d5db710cfe6f824c2778fdeabf6538acb7.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Toms And Bass Drums Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Standard Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/e99e5ff1def23fbe46ed439b74343b9e605e52ee888ae983bb303d4e56fbf4a8.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/e99e5ff1def23fbe46ed439b74343b9e605e52ee888ae983bb303d4e56fbf4a8.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/e99e5ff1def23fbe46ed439b74343b9e605e52ee888ae983bb303d4e56fbf4a8.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/e99e5ff1def23fbe46ed439b74343b9e605e52ee888ae983bb303d4e56fbf4a8.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/e99e5ff1def23fbe46ed439b74343b9e605e52ee888ae983bb303d4e56fbf4a8.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Toms And Bass Drums Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Standard Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/f52900b4d8b84864c219906d6c1164cccfd7669b72e44209031921a355dfed04.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/f52900b4d8b84864c219906d6c1164cccfd7669b72e44209031921a355dfed04.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/f52900b4d8b84864c219906d6c1164cccfd7669b72e44209031921a355dfed04.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/f52900b4d8b84864c219906d6c1164cccfd7669b72e44209031921a355dfed04.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/f52900b4d8b84864c219906d6c1164cccfd7669b72e44209031921a355dfed04.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Ethnic Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Split Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/b71cfde7910166a34b155c13b647c1fcec76bdc07d8c0b58244bbeb0b86d0a0e.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/b71cfde7910166a34b155c13b647c1fcec76bdc07d8c0b58244bbeb0b86d0a0e.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/b71cfde7910166a34b155c13b647c1fcec76bdc07d8c0b58244bbeb0b86d0a0e.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/b71cfde7910166a34b155c13b647c1fcec76bdc07d8c0b58244bbeb0b86d0a0e.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/b71cfde7910166a34b155c13b647c1fcec76bdc07d8c0b58244bbeb0b86d0a0e.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Ethnic Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Split Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/7515d52de112b4409ca70eb23fe86c341ebca9988d1c16bac51ab212fdc6a97b.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/7515d52de112b4409ca70eb23fe86c341ebca9988d1c16bac51ab212fdc6a97b.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/7515d52de112b4409ca70eb23fe86c341ebca9988d1c16bac51ab212fdc6a97b.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/7515d52de112b4409ca70eb23fe86c341ebca9988d1c16bac51ab212fdc6a97b.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/7515d52de112b4409ca70eb23fe86c341ebca9988d1c16bac51ab212fdc6a97b.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Orchestral Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Split Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/fb148bed506610e54d8fed8070ba8b59d0b1771854f8260fceae7ae6284d148d.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/fb148bed506610e54d8fed8070ba8b59d0b1771854f8260fceae7ae6284d148d.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/fb148bed506610e54d8fed8070ba8b59d0b1771854f8260fceae7ae6284d148d.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/fb148bed506610e54d8fed8070ba8b59d0b1771854f8260fceae7ae6284d148d.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/fb148bed506610e54d8fed8070ba8b59d0b1771854f8260fceae7ae6284d148d.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Orchestral Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Split Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/ea4d67722956a988d22eb2b7dd6a1bd1674a642d56dc636686ed56288a2524f3.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/ea4d67722956a988d22eb2b7dd6a1bd1674a642d56dc636686ed56288a2524f3.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/ea4d67722956a988d22eb2b7dd6a1bd1674a642d56dc636686ed56288a2524f3.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/ea4d67722956a988d22eb2b7dd6a1bd1674a642d56dc636686ed56288a2524f3.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/ea4d67722956a988d22eb2b7dd6a1bd1674a642d56dc636686ed56288a2524f3.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Taikos Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Split Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/3168f02b8563a2bca5351d4d5940b38b7a39e7d700575f932a52e76fc2d8cf78.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/3168f02b8563a2bca5351d4d5940b38b7a39e7d700575f932a52e76fc2d8cf78.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/3168f02b8563a2bca5351d4d5940b38b7a39e7d700575f932a52e76fc2d8cf78.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/3168f02b8563a2bca5351d4d5940b38b7a39e7d700575f932a52e76fc2d8cf78.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/3168f02b8563a2bca5351d4d5940b38b7a39e7d700575f932a52e76fc2d8cf78.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Taikos Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Split Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/efcf7f8cac11dde51a881804cf39c7faa2b58b252563b814b883db2360a75ce5.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/efcf7f8cac11dde51a881804cf39c7faa2b58b252563b814b883db2360a75ce5.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/efcf7f8cac11dde51a881804cf39c7faa2b58b252563b814b883db2360a75ce5.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/efcf7f8cac11dde51a881804cf39c7faa2b58b252563b814b883db2360a75ce5.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/efcf7f8cac11dde51a881804cf39c7faa2b58b252563b814b883db2360a75ce5.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Toms And Bass Drums Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Split Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/0f5e1d63dd0f7a64b19fe2a48ce3ee7e20c581ba0025de0f512688707beed500.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/0f5e1d63dd0f7a64b19fe2a48ce3ee7e20c581ba0025de0f512688707beed500.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/0f5e1d63dd0f7a64b19fe2a48ce3ee7e20c581ba0025de0f512688707beed500.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/0f5e1d63dd0f7a64b19fe2a48ce3ee7e20c581ba0025de0f512688707beed500.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/0f5e1d63dd0f7a64b19fe2a48ce3ee7e20c581ba0025de0f512688707beed500.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>All Toms And Bass Drums Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit (Split Velocity)  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/d8d7fa3c536ca2c77d837fba18fcc3815825a037462f82846f4e5d9366c3d1f8.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/d8d7fa3c536ca2c77d837fba18fcc3815825a037462f82846f4e5d9366c3d1f8.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/d8d7fa3c536ca2c77d837fba18fcc3815825a037462f82846f4e5d9366c3d1f8.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/d8d7fa3c536ca2c77d837fba18fcc3815825a037462f82846f4e5d9366c3d1f8.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/d8d7fa3c536ca2c77d837fba18fcc3815825a037462f82846f4e5d9366c3d1f8.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bass Drums Ensemble - Hard Mallet</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/9db4623816a7ab1d936ef2afcf0f82a8ede7a49ab8e7f96f7e4c558265c5e7ff.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/9db4623816a7ab1d936ef2afcf0f82a8ede7a49ab8e7f96f7e4c558265c5e7ff.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/9db4623816a7ab1d936ef2afcf0f82a8ede7a49ab8e7f96f7e4c558265c5e7ff.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/9db4623816a7ab1d936ef2afcf0f82a8ede7a49ab8e7f96f7e4c558265c5e7ff.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/9db4623816a7ab1d936ef2afcf0f82a8ede7a49ab8e7f96f7e4c558265c5e7ff.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bass Drums Ensemble - Puilli</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Dynamic Hit  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/9eff04fe6a659f2e71f4cc0628b53e946ea6e6a03be967e2e6cac65eaf22e84a.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/9eff04fe6a659f2e71f4cc0628b53e946ea6e6a03be967e2e6cac65eaf22e84a.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/9eff04fe6a659f2e71f4cc0628b53e946ea6e6a03be967e2e6cac65eaf22e84a.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/9eff04fe6a659f2e71f4cc0628b53e946ea6e6a03be967e2e6cac65eaf22e84a.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/9eff04fe6a659f2e71f4cc0628b53e946ea6e6a03be967e2e6cac65eaf22e84a.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bass Drums Ensemble - Hard Mallet</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Traditional Hits and Rolls  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/2f47b8ea37cb18e5cb8850d5fdbc5bc3035debf3a19fd3947724576ac99b2e69.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/2f47b8ea37cb18e5cb8850d5fdbc5bc3035debf3a19fd3947724576ac99b2e69.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/2f47b8ea37cb18e5cb8850d5fdbc5bc3035debf3a19fd3947724576ac99b2e69.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/2f47b8ea37cb18e5cb8850d5fdbc5bc3035debf3a19fd3947724576ac99b2e69.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/2f47b8ea37cb18e5cb8850d5fdbc5bc3035debf3a19fd3947724576ac99b2e69.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bass Drums Ensemble - Hard Mallet</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Fast Flam  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/d54a3671bb1f0cafc391c972b84f2a79f81e152ae15053790b6ad74b8c7e4681.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/d54a3671bb1f0cafc391c972b84f2a79f81e152ae15053790b6ad74b8c7e4681.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/d54a3671bb1f0cafc391c972b84f2a79f81e152ae15053790b6ad74b8c7e4681.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/476a75744b43524241e85cb0fce847044eacfa483f126f69a1fe066d994fedf4.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/d54a3671bb1f0cafc391c972b84f2a79f81e152ae15053790b6ad74b8c7e4681.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/d54a3671bb1f0cafc391c972b84f2a79f81e152ae15053790b6ad74b8c7e4681.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bass Drums Ensemble - Hard Mallet</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Slow Flam  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/d235e155221fe000b6

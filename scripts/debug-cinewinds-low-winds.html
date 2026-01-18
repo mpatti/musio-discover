@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>CineWinds - Low Winds</title>
+        <link rel="stylesheet" href="static/index.css">
+        <link rel="icon" href="static/favicon.ico" />
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+      
+
+
+<div class="catalog-container">
+    
+        
+<div class="catalog-header">
+    
+        <script>
+    function redirect(){
+        window.location.href = '/'
+    }
+</script>
+<div class="back-button" onclick="redirect()">
+    <svg id='back-btn-edit-user'width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+</div>
+    
+    <h2></h2>
+    <div class="catalog-header-spacer"></div>
+    <!-- <form action="/search" method = "GET">
+        <div class="search-element">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.25 29.25C22.982 29.25 29.25 22.982 29.25 15.25C29.25 7.51801 22.982 1.25 15.25 1.25C7.51801 1.25 1.25 7.51801 1.25 15.25C1.25 22.982 7.51801 29.25 15.25 29.25Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M32.7492 32.7502L25.1367 25.1377" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>   
+            <input id="search-input"type="text" class="form-control" id="search-text" name="q" aria-describedby="search-text" placeholder="Search for...">
+        </div>
+    </form> -->
+</div>
+    
+    <script src="static/ogvjs-1.8.9/ogv.js"></script>
+    <div class="collection-header" style="background-image: linear-gradient(to bottom, rgba(19, 19, 19, 0.52), rgba(13, 12, 13, 0.852)), url(https://assets.mus.io/aa03ffe5eb95a4c9d32e2ddb7596683466cab67442e5e1d54020343dec4c21b6.png); background-repeat: no-repeat; background-size: cover; background-position: 50% 60%;">
+        <h1>CineWinds - Low Winds</h1>
+        <h2 class="subtext">Low Pitched Woodwinds</h2>
+        <h3 class="subtext">CineWinds Low Winds is a super beefy low woodwind ensemble of bassoons, contrabassoons, bass clarinets, and contrabass clarinets recorded at the legendary MGM Scoring Scoring Stage at Sony Pictures Studios in Los Angeles. </h3>
+    </div>
+    <script>
+        let audioPlayer, audioElem, playNode, pauseNode, prevElementIdPlaying;
+
+        function collectionDetail(collection){
+            let slug = collection['collectionSlug']
+            window.location.href = '/' + slug
+        }
+        function ogvAudio(url){
+                let player = new OGVPlayer();
+                player.src = url;
+                return player;
+        }
+        function removeAllChildNodes(parent){
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+            return;
+        }
+        function createNodes(){
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+
+            pauseNode = document.createElement('p')
+            pauseNode.classList.add('fa')
+            pauseNode.classList.add('fa-pause-circle-o')
+            pauseNode.style['font-size'] = '24px'
+        }
+        function changeToOGVPlayer(previewUrl){
+            audioPlayer = ogvAudio(previewUrl)
+            audioPlayer.setAttribute('id', previewUrl )
+
+            audioPlayer.onended = function(){
+            let elem = document.getElementById('audio-preview-play-pause-' + previewUrl)
+            removeAllChildNodes(elem)
+            
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+            elem.appendChild(playNode)
+            }
+
+            audioElem = document.getElementById(previewUrl)
+            
+            if (audioElem){
+                audioElem.replaceWith(audioPlayer)
+            }
+            
+        }
+        function previewAudio(previewUrl){
+
+            let prevAudioPlaying = document.getElementById(prevElementIdPlaying)
+
+            if (prevAudioPlaying && (prevElementIdPlaying !== previewUrl)){
+                prevAudioPlaying.pause()
+                let prevAudioElem = document.getElementById('audio-preview-play-pause-'+prevElementIdPlaying)
+                removeAllChildNodes(prevAudioElem)
+                prevAudioElem.appendChild(playNode)
+            }
+            
+            let audio = document.getElementById(previewUrl)
+            let oldNode = document.getElementById('audio-preview-play-pause-'+ previewUrl)
+
+            if (audio.paused == true) {
+
+                audio.play();
+                prevElementIdPlaying = previewUrl
+                removeAllChildNodes(oldNode)
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(pauseNode)
+            
+            } else if (!audio.paused) {
+
+                audio.pause()
+                prevElementIdPlaying = ''
+                removeAllChildNodes(oldNode)
+                createNodes()
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(playNode)
+                
+            }
+        }
+        function loadOGVPlayer(previewUrl){
+            changeToOGVPlayer(previewUrl)
+            createNodes()
+        }
+
+        function checkForExistingOGVPlayer(previewUrl){
+            let element = document.getElementById(previewUrl)
+            if (element.nodeName.toString() == 'OGVJS'){
+                return true;
+            }
+            return false;
+        }
+
+    </script>
+
+    <div class="row-layout">
+        
+        <!-- just call below in main.py and pass info to collection_detail.html -->
+
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/aaa82cf5a01f2efd1d2aa4c30e202077892958846b69ad6108b514cd968b8ea7.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Low Winds</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/c0a5bf81aa1cfc727abb38435539f6e2f529bcb4a8ade308dc1f52032c6aed2e.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/c0a5bf81aa1cfc727abb38435539f6e2f529bcb4a8ade308dc1f52032c6aed2e.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/c0a5bf81aa1cfc727abb38435539f6e2f529bcb4a8ade308dc1f52032c6aed2e.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/aaa82cf5a01f2efd1d2aa4c30e202077892958846b69ad6108b514cd968b8ea7.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/c0a5bf81aa1cfc727abb38435539f6e2f529bcb4a8ade308dc1f52032c6aed2e.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/c0a5bf81aa1cfc727abb38435539f6e2f529bcb4a8ade308dc1f52032c6aed2e.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Legato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/7f17f2621d38a65fa663d08ed4aa2e5ce87acafe93a435bce10af4a6d8b1af95.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/7f17f2621d38a65fa663d08ed4aa2e5ce87acafe93a435bce10af4a6d8b1af95.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/7f17f2621d38a65fa663d08ed4aa2e5ce87acafe93a435bce10af4a6d8b1af95.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/aaa82cf5a01f2efd1d2aa4c30e202077892958846b69ad6108b514cd968b8ea7.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/7f17f2621d38a65fa663d08ed4aa2e5ce87acafe93a435bce10af4a6d8b1af95.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/7f17f2621d38a65fa663d08ed4aa2e5ce87acafe93a435bce10af4a6d8b1af95.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/ce02e33cfc7edf6e531a2bf847c84a644d8b068ad546f4ac33ed917e841c7e79.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/ce02e33cfc7edf6e531a2bf847c84a644d8b068ad546f4ac33ed917e841c7e79.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/ce02e33cfc7edf6e531a2bf847c84a644d8b068ad546f4ac33ed917e841c7e79.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/aaa82cf5a01f2efd1d2aa4c30e202077892958846b69ad6108b514cd968b8ea7.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/ce02e33cfc7edf6e531a2bf847c84a644d8b068ad546f4ac33ed917e841c7e79.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/ce02e33cfc7edf6e531a2bf847c84a644d8b068ad546f4ac33ed917e841c7e79.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Staccato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/eb0db182f765faff3d104441f832a5dcc8572036f6f35119e729475a691b58ec.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/eb0db182f765faff3d104441f832a5dcc8572036f6f35119e729475a691b58ec.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/eb0db182f765faff3d104441f832a5dcc8572036f6f35119e729475a691b58ec.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/aaa82cf5a01f2efd1d2aa4c30e202077892958846b69ad6108b514cd968b8ea7.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/eb0db182f765faff3d104441f832a5dcc8572036f6f35119e729475a691b58ec.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/eb0db182f765faff3d104441f832a5dcc8572036f6f35119e729475a691b58ec.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Staccatissimo </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/126efa6e3aacf2480dc5e28b08d57d49563531db38eb0dcea3264ffa3c7769a0.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/126efa6e3aacf2480dc5e28b08d57d49563531db38eb0dcea3264ffa3c7769a0.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/126efa6e3aacf2480dc5e28b08d57d49563531db38eb0dcea3264ffa3c7769a0.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/aaa82cf5a01f2efd1d2aa4c30e202077892958846b69ad6108b514cd968b8ea7.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/126efa6e3aacf2480dc5e28b08d57d49563531db38eb0dcea3264ffa3c7769a0.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/126efa6e3aacf2480dc5e28b08d57d49563531db38eb0dcea3264ffa3c7769a0.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> FX | Rumble </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/ee8247044b31bb50abe8af7de952d45eb29d96e16e1e7f683b993fb149248f16.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/ee8247044b31bb50abe8af7de952d45eb29d96e16e1e7f683b993fb149248f16.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/ee8247044b31bb50abe8af7de952d45eb29d96e16e1e7f683b993fb149248f16.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/aaa82cf5a01f2efd1d2aa4c30e202077892958846b69ad6108b514cd968b8ea7.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/ee8247044b31bb50abe8af7de952d45eb29d96e16e1e7f683b993fb149248f16.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/ee8247044b31bb50abe8af7de952d45eb29d96e16e1e7f683b993fb149248f16.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> FX | Squeaks </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/3ed6b375aafc24f05701d3c85e03135294ba5c23fd2db921ce1e965b41ef71e0.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/3ed6b375aafc24f05701d3c85e03135294ba5c23fd2db921ce1e965b41ef71e0.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/3ed6b375aafc24f05701d3c85e03135294ba5c23fd2db921ce1e965b41ef71e0.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/aaa82cf5a01f2efd1d2aa4c30e202077892958846b69ad6108b514cd968b8ea7.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/3ed6b375aafc24f05701d3c85e03135294ba5c23fd2db921ce1e965b41ef71e0.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/3ed6b375aafc24f05701d3c85e03135294ba5c23fd2db921ce1e965b41ef71e0.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> FX | Clusters Short </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/4f6ac8cc96a76a6b6059930a33f3211195744eed84b1605220f3608a5898be7c.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/4f6ac8cc96a76a6b6059930a33f3211195744eed84b1605220f3608a5898be7c.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/4f6ac8cc96a76a6b6059930a33f3211195744eed84b1605220f3608a5898be7c.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/aaa82cf5a01f2efd1d2aa4c30e202077892958846b69ad6108b514cd968b8ea7.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/4f6ac8cc96a76a6b6059930a33f3211195744eed84b1605220f3608a5898be7c.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/4f6ac8cc96a76a6b6059930a33f3211195744eed84b1605220f3608a5898be7c.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> FX | Swells </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/f00ffec3b64f9cf8c33a7ae51740cd8b330db56c86855d90afbe2ce9eac23ec7.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/f00ffec3b64f9cf8c33a7ae51740cd8b330db56c86855d90afbe2ce9eac23ec7.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/f00ffec3b64f9cf8c33a7ae51740cd8b330db56c86855d90afbe2ce9eac23ec7.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/aaa82cf5a01f2efd1d2aa4c30e202077892958846b69ad6108b514cd968b8ea7.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/f00ffec3b64f9cf8c33a7ae51740cd8b330db56c86855d90afbe2ce9eac23ec7.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/f00ffec3b64f9cf8c33a7ae51740cd8b330db56c86855d90afbe2ce9eac23ec7.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ensemble</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> FX | Rips </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+    </body>
+</html>

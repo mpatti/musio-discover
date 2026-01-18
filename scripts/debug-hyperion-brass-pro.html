@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Hyperion Brass Pro</title>
+        <link rel="stylesheet" href="static/index.css">
+        <link rel="icon" href="static/favicon.ico" />
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+      
+
+
+<div class="catalog-container">
+    
+        
+<div class="catalog-header">
+    
+        <script>
+    function redirect(){
+        window.location.href = '/'
+    }
+</script>
+<div class="back-button" onclick="redirect()">
+    <svg id='back-btn-edit-user'width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+</div>
+    
+    <h2></h2>
+    <div class="catalog-header-spacer"></div>
+    <!-- <form action="/search" method = "GET">
+        <div class="search-element">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.25 29.25C22.982 29.25 29.25 22.982 29.25 15.25C29.25 7.51801 22.982 1.25 15.25 1.25C7.51801 1.25 1.25 7.51801 1.25 15.25C1.25 22.982 7.51801 29.25 15.25 29.25Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M32.7492 32.7502L25.1367 25.1377" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>   
+            <input id="search-input"type="text" class="form-control" id="search-text" name="q" aria-describedby="search-text" placeholder="Search for...">
+        </div>
+    </form> -->
+</div>
+    
+    <script src="static/ogvjs-1.8.9/ogv.js"></script>
+    <div class="collection-header" style="background-image: linear-gradient(to bottom, rgba(19, 19, 19, 0.52), rgba(13, 12, 13, 0.852)), url(https://assets.mus.io/4935dd5bad606b9cd1d6d4c7b128f35671e64c49357ff444d5a174695cd9066e.png); background-repeat: no-repeat; background-size: cover; background-position: 50% 60%;">
+        <h1>Hyperion Brass Pro</h1>
+        <h2 class="subtext">Finely-crafted orchestral brass for everyone</h2>
+        <h3 class="subtext">The rich full-bodied tone and wide dynamic range orchestral brass collection includes 10 different ensembles built with the instruments from our Core entry with the same full range of expressive playable articulations.</h3>
+    </div>
+    <script>
+        let audioPlayer, audioElem, playNode, pauseNode, prevElementIdPlaying;
+
+        function collectionDetail(collection){
+            let slug = collection['collectionSlug']
+            window.location.href = '/' + slug
+        }
+        function ogvAudio(url){
+                let player = new OGVPlayer();
+                player.src = url;
+                return player;
+        }
+        function removeAllChildNodes(parent){
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+            return;
+        }
+        function createNodes(){
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+
+            pauseNode = document.createElement('p')
+            pauseNode.classList.add('fa')
+            pauseNode.classList.add('fa-pause-circle-o')
+            pauseNode.style['font-size'] = '24px'
+        }
+        function changeToOGVPlayer(previewUrl){
+            audioPlayer = ogvAudio(previewUrl)
+            audioPlayer.setAttribute('id', previewUrl )
+
+            audioPlayer.onended = function(){
+            let elem = document.getElementById('audio-preview-play-pause-' + previewUrl)
+            removeAllChildNodes(elem)
+            
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+            elem.appendChild(playNode)
+            }
+
+            audioElem = document.getElementById(previewUrl)
+            
+            if (audioElem){
+                audioElem.replaceWith(audioPlayer)
+            }
+            
+        }
+        function previewAudio(previewUrl){
+
+            let prevAudioPlaying = document.getElementById(prevElementIdPlaying)
+
+            if (prevAudioPlaying && (prevElementIdPlaying !== previewUrl)){
+                prevAudioPlaying.pause()
+                let prevAudioElem = document.getElementById('audio-preview-play-pause-'+prevElementIdPlaying)
+                removeAllChildNodes(prevAudioElem)
+                prevAudioElem.appendChild(playNode)
+            }
+            
+            let audio = document.getElementById(previewUrl)
+            let oldNode = document.getElementById('audio-preview-play-pause-'+ previewUrl)
+
+            if (audio.paused == true) {
+
+                audio.play();
+                prevElementIdPlaying = previewUrl
+                removeAllChildNodes(oldNode)
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(pauseNode)
+            
+            } else if (!audio.paused) {
+
+                audio.pause()
+                prevElementIdPlaying = ''
+                removeAllChildNodes(oldNode)
+                createNodes()
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(playNode)
+                
+            }
+        }
+        function loadOGVPlayer(previewUrl){
+            changeToOGVPlayer(previewUrl)
+            createNodes()
+        }
+
+        function checkForExistingOGVPlayer(previewUrl){
+            let element = document.getElementById(previewUrl)
+            if (element.nodeName.toString() == 'OGVJS'){
+                return true;
+            }
+            return false;
+        }
+
+    </script>
+
+    <div class="row-layout">
+        
+        <!-- just call below in main.py and pass info to collection_detail.html -->
+
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 2: Trpt, T.Tbn, Euph, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 3: Trpt, Horn, Euph, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 4: Trpt, T.Tbn, Euph, B.Tbn</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 5: Trpt, Horn, Euph, B.Tbn</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 6: Trpt, T.Tbn, Horn, B.Tbn</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 7: Trpt, T.Tbn, B.Tbn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 8: Trpt, Horn, B.Tbn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 9: Trpt, Euph, B.Tbn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 10: Trpt, T.Tbn, Horn, Euph</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/306418eb2bb2b02b0623f446e43d83828225ec39ae4e2ac778805fe4252e9641.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/306418eb2bb2b02b0623f446e43d83828225ec39ae4e2ac778805fe4252e9641.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/306418eb2bb2b02b0623f446e43d83828225ec39ae4e2ac778805fe4252e9641.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/306418eb2bb2b02b0623f446e43d83828225ec39ae4e2ac778805fe4252e9641.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/306418eb2bb2b02b0623f446e43d83828225ec39ae4e2ac778805fe4252e9641.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Sustain Non Vibrato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/0a71152575ad125d6210e3fb62640b9a90e89e459bda138cec2e5d5265d2cbdb.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/0a71152575ad125d6210e3fb62640b9a90e89e459bda138cec2e5d5265d2cbdb.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/0a71152575ad125d6210e3fb62640b9a90e89e459bda138cec2e5d5265d2cbdb.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/0a71152575ad125d6210e3fb62640b9a90e89e459bda138cec2e5d5265d2cbdb.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/0a71152575ad125d6210e3fb62640b9a90e89e459bda138cec2e5d5265d2cbdb.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Short Staccato Fast  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/12f2ea653bdf8da3c17f3291d6cc5fef53242c678d77c99acd081304254ca09d.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/12f2ea653bdf8da3c17f3291d6cc5fef53242c678d77c99acd081304254ca09d.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/12f2ea653bdf8da3c17f3291d6cc5fef53242c678d77c99acd081304254ca09d.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/12f2ea653bdf8da3c17f3291d6cc5fef53242c678d77c99acd081304254ca09d.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/12f2ea653bdf8da3c17f3291d6cc5fef53242c678d77c99acd081304254ca09d.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Short Staccato Slow  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/760054f0f0594bbd67f53f5d792ed03ff1d23ede43750f37050bef38f2cd2a10.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/760054f0f0594bbd67f53f5d792ed03ff1d23ede43750f37050bef38f2cd2a10.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/760054f0f0594bbd67f53f5d792ed03ff1d23ede43750f37050bef38f2cd2a10.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/760054f0f0594bbd67f53f5d792ed03ff1d23ede43750f37050bef38f2cd2a10.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/760054f0f0594bbd67f53f5d792ed03ff1d23ede43750f37050bef38f2cd2a10.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Long Staccato Fast  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/39fcf32dda38746b9196a7072123bc5b412fe9c08949aca327e92ba2d0bf8355.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/39fcf32dda38746b9196a7072123bc5b412fe9c08949aca327e92ba2d0bf8355.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/39fcf32dda38746b9196a7072123bc5b412fe9c08949aca327e92ba2d0bf8355.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/39fcf32dda38746b9196a7072123bc5b412fe9c08949aca327e92ba2d0bf8355.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/39fcf32dda38746b9196a7072123bc5b412fe9c08949aca327e92ba2d0bf8355.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Long Staccato Slow  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/521368b368dcb2036beb7eec1c00821229cd17579872a8691252f17af0929731.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/521368b368dcb2036beb7eec1c00821229cd17579872a8691252f17af0929731.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/521368b368dcb2036beb7eec1c00821229cd17579872a8691252f17af0929731.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/521368b368dcb2036beb7eec1c00821229cd17579872a8691252f17af0929731.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/521368b368dcb2036beb7eec1c00821229cd17579872a8691252f17af0929731.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Sforzando Long  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/f02c5b96b536c3dd6ffdb119fea9dc127ed00f61de3fbd95f9e1315b7a6f3463.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/f02c5b96b536c3dd6ffdb119fea9dc127ed00f61de3fbd95f9e1315b7a6f3463.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/f02c5b96b536c3dd6ffdb119fea9dc127ed00f61de3fbd95f9e1315b7a6f3463.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/f02c5b96b536c3dd6ffdb119fea9dc127ed00f61de3fbd95f9e1315b7a6f3463.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/f02c5b96b536c3dd6ffdb119fea9dc127ed00f61de3fbd95f9e1315b7a6f3463.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Sforzando Short  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/71497ebde9f2fba4b27581604ca76cbd0a4b55b817a604ffaa40b57d3cfbc145.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/71497ebde9f2fba4b27581604ca76cbd0a4b55b817a604ffaa40b57d3cfbc145.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/71497ebde9f2fba4b27581604ca76cbd0a4b55b817a604ffaa40b57d3cfbc145.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/71497ebde9f2fba4b27581604ca76cbd0a4b55b817a604ffaa40b57d3cfbc145.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/71497ebde9f2fba4b27581604ca76cbd0a4b55b817a604ffaa40b57d3cfbc145.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Double-Tongue  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/1a6190361558cf60767f5c7d0ef62e0565b7244d7d015d7a4a86cf82b8e6b62d.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/1a6190361558cf60767f5c7d0ef62e0565b7244d7d015d7a4a86cf82b8e6b62d.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/1a6190361558cf60767f5c7d0ef62e0565b7244d7d015d7a4a86cf82b8e6b62d.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/1a6190361558cf60767f5c7d0ef62e0565b7244d7d015d7a4a86cf82b8e6b62d.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/1a6190361558cf60767f5c7d0ef62e0565b7244d7d015d7a4a86cf82b8e6b62d.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Triple-Tongue  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/d6df0fdf2b57f98cc7e9f60bf786f440c7d3616e166634b9f3c1f74bd8aafa5c.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/d6df0fdf2b57f98cc7e9f60bf786f440c7d3616e166634b9f3c1f74bd8aafa5c.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/d6df0fdf2b57f98cc7e9f60bf786f440c7d3616e166634b9f3c1f74bd8aafa5c.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/d6df0fdf2b57f98cc7e9f60bf786f440c7d3616e166634b9f3c1f74bd8aafa5c.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/d6df0fdf2b57f98cc7e9f60bf786f440c7d3616e166634b9f3c1f74bd8aafa5c.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Crescendo Long  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/aeb112ec18fc4718baa1ba5bca584f6a568c3d93982bcbc17a3cd4c173fc76b4.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/aeb112ec18fc4718baa1ba5bca584f6a568c3d93982bcbc17a3cd4c173fc76b4.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/aeb112ec18fc4718baa1ba5bca584f6a568c3d93982bcbc17a3cd4c173fc76b4.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/aeb112ec18fc4718baa1ba5bca584f6a568c3d93982bcbc17a3cd4c173fc76b4.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/aeb112ec18fc4718baa1ba5bca584f6a568c3d93982bcbc17a3cd4c173fc76b4.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Crescendo Short  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/4405c2c32a67cdbd5ccd8289f9ff247925e5e570d9586d885600d06a9f7d9948.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/4405c2c32a67cdbd5ccd8289f9ff247925e5e570d9586d885600d06a9f7d9948.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/4405c2c32a67cdbd5ccd8289f9ff247925e5e570d9586d885600d06a9f7d9948.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/4405c2c32a67cdbd5ccd8289f9ff247925e5e570d9586d885600d06a9f7d9948.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/4405c2c32a67cdbd5ccd8289f9ff247925e5e570d9586d885600d06a9f7d9948.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Decrescendo Long  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/c42bde5b9b530aabdcb07ec104ec3a13d516e608a685f762595efbb9cd34ea5f.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/c42bde5b9b530aabdcb07ec104ec3a13d516e608a685f762595efbb9cd34ea5f.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/c42bde5b9b530aabdcb07ec104ec3a13d516e608a685f762595efbb9cd34ea5f.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/c42bde5b9b530aabdcb07ec104ec3a13d516e608a685f762595efbb9cd34ea5f.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/c42bde5b9b530aabdcb07ec104ec3a13d516e608a685f762595efbb9cd34ea5f.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Decrescendo Short  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/d2908bdeba675ee3195e03ba051b04f020174436e374a91f1836d0ef56684dc6.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/d2908bdeba675ee3195e03ba051b04f020174436e374a91f1836d0ef56684dc6.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/d2908bdeba675ee3195e03ba051b04f020174436e374a91f1836d0ef56684dc6.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/d2908bdeba675ee3195e03ba051b04f020174436e374a91f1836d0ef56684dc6.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/d2908bdeba675ee3195e03ba051b04f020174436e374a91f1836d0ef56684dc6.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Swell Long  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/ed864a58da6133529bef5de5e44e9e04bc9d7fb7586a983b15d54661c02733f3.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/ed864a58da6133529bef5de5e44e9e04bc9d7fb7586a983b15d54661c02733f3.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/ed864a58da6133529bef5de5e44e9e04bc9d7fb7586a983b15d54661c02733f3.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/ed864a58da6133529bef5de5e44e9e04bc9d7fb7586a983b15d54661c02733f3.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/ed864a58da6133529bef5de5e44e9e04bc9d7fb7586a983b15d54661c02733f3.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 1: Trpt, T.Tbn, Horn, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Swell Short  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/d547ff21642f6daacff97c9fe3da9a94e929dd7b7623db3d22e35e414ac1e550.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/d547ff21642f6daacff97c9fe3da9a94e929dd7b7623db3d22e35e414ac1e550.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/d547ff21642f6daacff97c9fe3da9a94e929dd7b7623db3d22e35e414ac1e550.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/1d217a9d3e3a6b391476302610adcba94c52d22e349bf3247518bb863fb85b68.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/d547ff21642f6daacff97c9fe3da9a94e929dd7b7623db3d22e35e414ac1e550.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/d547ff21642f6daacff97c9fe3da9a94e929dd7b7623db3d22e35e414ac1e550.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ens 2: Trpt, T.Tbn, Euph, Tuba</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Sustain Non Vibrato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/52df1951f1ab766e7732cf38b78fe98373aea263067ea50f85a142041d38756e.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/52df1951f1ab766e7732cf38b78fe98373aea263067ea50f85a142041d38756e.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/52df1951f1ab766e7732cf38b78fe98373aea263067ea50f85a142041d38756e.ogg')
+                        "
+                        target="_blank" >
+                        <img sr

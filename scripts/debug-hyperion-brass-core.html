@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Hyperion Brass Core</title>
+        <link rel="stylesheet" href="static/index.css">
+        <link rel="icon" href="static/favicon.ico" />
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+      
+
+
+<div class="catalog-container">
+    
+        
+<div class="catalog-header">
+    
+        <script>
+    function redirect(){
+        window.location.href = '/'
+    }
+</script>
+<div class="back-button" onclick="redirect()">
+    <svg id='back-btn-edit-user'width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+</div>
+    
+    <h2></h2>
+    <div class="catalog-header-spacer"></div>
+    <!-- <form action="/search" method = "GET">
+        <div class="search-element">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.25 29.25C22.982 29.25 29.25 22.982 29.25 15.25C29.25 7.51801 22.982 1.25 15.25 1.25C7.51801 1.25 1.25 7.51801 1.25 15.25C1.25 22.982 7.51801 29.25 15.25 29.25Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M32.7492 32.7502L25.1367 25.1377" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>   
+            <input id="search-input"type="text" class="form-control" id="search-text" name="q" aria-describedby="search-text" placeholder="Search for...">
+        </div>
+    </form> -->
+</div>
+    
+    <script src="static/ogvjs-1.8.9/ogv.js"></script>
+    <div class="collection-header" style="background-image: linear-gradient(to bottom, rgba(19, 19, 19, 0.52), rgba(13, 12, 13, 0.852)), url(https://assets.mus.io/4935dd5bad606b9cd1d6d4c7b128f35671e64c49357ff444d5a174695cd9066e.png); background-repeat: no-repeat; background-size: cover; background-position: 50% 60%;">
+        <h1>Hyperion Brass Core</h1>
+        <h2 class="subtext">Finely-crafted orchestral brass for everyone</h2>
+        <h3 class="subtext">The rich full-bodied tone and wide dynamic range orchestral brass collection includes 6 brass instrument sections: 6 Trumpets, 4 Tenor Trombones, 4 French Horns, 3 Euphoniums, 3 Bass Trombones, and 3 Tubas, each deeply sampled with a full range of expressive playable articulations.</h3>
+    </div>
+    <script>
+        let audioPlayer, audioElem, playNode, pauseNode, prevElementIdPlaying;
+
+        function collectionDetail(collection){
+            let slug = collection['collectionSlug']
+            window.location.href = '/' + slug
+        }
+        function ogvAudio(url){
+                let player = new OGVPlayer();
+                player.src = url;
+                return player;
+        }
+        function removeAllChildNodes(parent){
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+            return;
+        }
+        function createNodes(){
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+
+            pauseNode = document.createElement('p')
+            pauseNode.classList.add('fa')
+            pauseNode.classList.add('fa-pause-circle-o')
+            pauseNode.style['font-size'] = '24px'
+        }
+        function changeToOGVPlayer(previewUrl){
+            audioPlayer = ogvAudio(previewUrl)
+            audioPlayer.setAttribute('id', previewUrl )
+
+            audioPlayer.onended = function(){
+            let elem = document.getElementById('audio-preview-play-pause-' + previewUrl)
+            removeAllChildNodes(elem)
+            
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+            elem.appendChild(playNode)
+            }
+
+            audioElem = document.getElementById(previewUrl)
+            
+            if (audioElem){
+                audioElem.replaceWith(audioPlayer)
+            }
+            
+        }
+        function previewAudio(previewUrl){
+
+            let prevAudioPlaying = document.getElementById(prevElementIdPlaying)
+
+            if (prevAudioPlaying && (prevElementIdPlaying !== previewUrl)){
+                prevAudioPlaying.pause()
+                let prevAudioElem = document.getElementById('audio-preview-play-pause-'+prevElementIdPlaying)
+                removeAllChildNodes(prevAudioElem)
+                prevAudioElem.appendChild(playNode)
+            }
+            
+            let audio = document.getElementById(previewUrl)
+            let oldNode = document.getElementById('audio-preview-play-pause-'+ previewUrl)
+
+            if (audio.paused == true) {
+
+                audio.play();
+                prevElementIdPlaying = previewUrl
+                removeAllChildNodes(oldNode)
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(pauseNode)
+            
+            } else if (!audio.paused) {
+
+                audio.pause()
+                prevElementIdPlaying = ''
+                removeAllChildNodes(oldNode)
+                createNodes()
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(playNode)
+                
+            }
+        }
+        function loadOGVPlayer(previewUrl){
+            changeToOGVPlayer(previewUrl)
+            createNodes()
+        }
+
+        function checkForExistingOGVPlayer(previewUrl){
+            let element = document.getElementById(previewUrl)
+            if (element.nodeName.toString() == 'OGVJS'){
+                return true;
+            }
+            return false;
+        }
+
+    </script>
+
+    <div class="row-layout">
+        
+        <!-- just call below in main.py and pass info to collection_detail.html -->
+
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Horns</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Tenor Trombones</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Euphoniums</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bass Trombones</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Tubas</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/b0fdd1658c25884616f0e7af263b2fe25e3b82b58f80ae70bf684aa52e6fb451.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/b0fdd1658c25884616f0e7af263b2fe25e3b82b58f80ae70bf684aa52e6fb451.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/b0fdd1658c25884616f0e7af263b2fe25e3b82b58f80ae70bf684aa52e6fb451.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/b0fdd1658c25884616f0e7af263b2fe25e3b82b58f80ae70bf684aa52e6fb451.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/b0fdd1658c25884616f0e7af263b2fe25e3b82b58f80ae70bf684aa52e6fb451.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Legato Vibrato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/e9c7b479c2a23297d9619a8fdf6893a46fd830289afbb5550bdd0080d772cfda.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/e9c7b479c2a23297d9619a8fdf6893a46fd830289afbb5550bdd0080d772cfda.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/e9c7b479c2a23297d9619a8fdf6893a46fd830289afbb5550bdd0080d772cfda.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/e9c7b479c2a23297d9619a8fdf6893a46fd830289afbb5550bdd0080d772cfda.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/e9c7b479c2a23297d9619a8fdf6893a46fd830289afbb5550bdd0080d772cfda.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Legato Non Vibrato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/14fbedfcbfdd82f35e863f0d1d80dcb4275d5c88fdb9f0927ba48525b190254b.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/14fbedfcbfdd82f35e863f0d1d80dcb4275d5c88fdb9f0927ba48525b190254b.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/14fbedfcbfdd82f35e863f0d1d80dcb4275d5c88fdb9f0927ba48525b190254b.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/14fbedfcbfdd82f35e863f0d1d80dcb4275d5c88fdb9f0927ba48525b190254b.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/14fbedfcbfdd82f35e863f0d1d80dcb4275d5c88fdb9f0927ba48525b190254b.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Sustain Vibrato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/da9c50579d3c7a4c974e2bc901a6450207c5248daa5041043dbec8fb0e83070d.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/da9c50579d3c7a4c974e2bc901a6450207c5248daa5041043dbec8fb0e83070d.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/da9c50579d3c7a4c974e2bc901a6450207c5248daa5041043dbec8fb0e83070d.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/da9c50579d3c7a4c974e2bc901a6450207c5248daa5041043dbec8fb0e83070d.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/da9c50579d3c7a4c974e2bc901a6450207c5248daa5041043dbec8fb0e83070d.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Sustain Non Vibrato  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/a49c07596c0ce1629138610f60140982eef6e5db92f6842e9258a5a2b9c4bdd0.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/a49c07596c0ce1629138610f60140982eef6e5db92f6842e9258a5a2b9c4bdd0.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/a49c07596c0ce1629138610f60140982eef6e5db92f6842e9258a5a2b9c4bdd0.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/a49c07596c0ce1629138610f60140982eef6e5db92f6842e9258a5a2b9c4bdd0.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/a49c07596c0ce1629138610f60140982eef6e5db92f6842e9258a5a2b9c4bdd0.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Sustain Flutter  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/495edb8cd6b4119d3da3fb9634d4c32e945704bfb2566c8fed537b76d19537d3.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/495edb8cd6b4119d3da3fb9634d4c32e945704bfb2566c8fed537b76d19537d3.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/495edb8cd6b4119d3da3fb9634d4c32e945704bfb2566c8fed537b76d19537d3.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/495edb8cd6b4119d3da3fb9634d4c32e945704bfb2566c8fed537b76d19537d3.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/495edb8cd6b4119d3da3fb9634d4c32e945704bfb2566c8fed537b76d19537d3.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Short Staccato Fast  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/81222d59126be451ebc05a1a2bdf3c646faa40be2dd046aab8e11d5388695ca4.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/81222d59126be451ebc05a1a2bdf3c646faa40be2dd046aab8e11d5388695ca4.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/81222d59126be451ebc05a1a2bdf3c646faa40be2dd046aab8e11d5388695ca4.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/81222d59126be451ebc05a1a2bdf3c646faa40be2dd046aab8e11d5388695ca4.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/81222d59126be451ebc05a1a2bdf3c646faa40be2dd046aab8e11d5388695ca4.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Short Staccato Slow  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/ab9e83195117fc3f963205155061656719cf24fcfde4761fa4b8d247c1317e3d.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/ab9e83195117fc3f963205155061656719cf24fcfde4761fa4b8d247c1317e3d.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/ab9e83195117fc3f963205155061656719cf24fcfde4761fa4b8d247c1317e3d.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/ab9e83195117fc3f963205155061656719cf24fcfde4761fa4b8d247c1317e3d.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/ab9e83195117fc3f963205155061656719cf24fcfde4761fa4b8d247c1317e3d.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Long Staccato Fast  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/e4f89ab0b3ca4ef6825caa4bc217f300af2c0540a19b6ee9a4beb21662f486e9.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/e4f89ab0b3ca4ef6825caa4bc217f300af2c0540a19b6ee9a4beb21662f486e9.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/e4f89ab0b3ca4ef6825caa4bc217f300af2c0540a19b6ee9a4beb21662f486e9.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/e4f89ab0b3ca4ef6825caa4bc217f300af2c0540a19b6ee9a4beb21662f486e9.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/e4f89ab0b3ca4ef6825caa4bc217f300af2c0540a19b6ee9a4beb21662f486e9.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Long Staccato Slow  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/b1aac4c015066247aed83763151bd0c112debefb5ce83b4b5105dadebe8f1d93.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/b1aac4c015066247aed83763151bd0c112debefb5ce83b4b5105dadebe8f1d93.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/b1aac4c015066247aed83763151bd0c112debefb5ce83b4b5105dadebe8f1d93.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/b1aac4c015066247aed83763151bd0c112debefb5ce83b4b5105dadebe8f1d93.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/b1aac4c015066247aed83763151bd0c112debefb5ce83b4b5105dadebe8f1d93.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Double-Tongue  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/e3af4c1f3b97b6f3913780c5f8aa6af8a814885339d0f177ab1a32a890346418.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/e3af4c1f3b97b6f3913780c5f8aa6af8a814885339d0f177ab1a32a890346418.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/e3af4c1f3b97b6f3913780c5f8aa6af8a814885339d0f177ab1a32a890346418.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/e3af4c1f3b97b6f3913780c5f8aa6af8a814885339d0f177ab1a32a890346418.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/e3af4c1f3b97b6f3913780c5f8aa6af8a814885339d0f177ab1a32a890346418.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Triple-Tongue  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/43d54f6b42acf6c24421b3f0ce26d070b4b4ac9c7346f139f79c75cf84be0df7.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/43d54f6b42acf6c24421b3f0ce26d070b4b4ac9c7346f139f79c75cf84be0df7.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/43d54f6b42acf6c24421b3f0ce26d070b4b4ac9c7346f139f79c75cf84be0df7.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/43d54f6b42acf6c24421b3f0ce26d070b4b4ac9c7346f139f79c75cf84be0df7.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/43d54f6b42acf6c24421b3f0ce26d070b4b4ac9c7346f139f79c75cf84be0df7.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Sforzando Long  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/e43e2e708dd5f485f3cb9320a5dfb2081227d3459fa046f77437c77f2c41a978.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/e43e2e708dd5f485f3cb9320a5dfb2081227d3459fa046f77437c77f2c41a978.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/e43e2e708dd5f485f3cb9320a5dfb2081227d3459fa046f77437c77f2c41a978.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/e43e2e708dd5f485f3cb9320a5dfb2081227d3459fa046f77437c77f2c41a978.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/e43e2e708dd5f485f3cb9320a5dfb2081227d3459fa046f77437c77f2c41a978.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Sforzando Short  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/0cde6054c4f9ec7915fb81fa5485bdb7bf2f86285c1a0cf6a4907e8f05e6c4eb.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/0cde6054c4f9ec7915fb81fa5485bdb7bf2f86285c1a0cf6a4907e8f05e6c4eb.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/0cde6054c4f9ec7915fb81fa5485bdb7bf2f86285c1a0cf6a4907e8f05e6c4eb.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/0cde6054c4f9ec7915fb81fa5485bdb7bf2f86285c1a0cf6a4907e8f05e6c4eb.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/0cde6054c4f9ec7915fb81fa5485bdb7bf2f86285c1a0cf6a4907e8f05e6c4eb.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Crescendo Long  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/77733da5bd98a034876265279eb53510c0cdaec598f0ad7864f12f97894e7e38.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/77733da5bd98a034876265279eb53510c0cdaec598f0ad7864f12f97894e7e38.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/77733da5bd98a034876265279eb53510c0cdaec598f0ad7864f12f97894e7e38.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/77733da5bd98a034876265279eb53510c0cdaec598f0ad7864f12f97894e7e38.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/77733da5bd98a034876265279eb53510c0cdaec598f0ad7864f12f97894e7e38.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Crescendo Short  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/6e463006bc077ba01064ae2d1d54e67f3ae354b70d61d146b4da9a5d6ebd8aab.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/6e463006bc077ba01064ae2d1d54e67f3ae354b70d61d146b4da9a5d6ebd8aab.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/6e463006bc077ba01064ae2d1d54e67f3ae354b70d61d146b4da9a5d6ebd8aab.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/6e463006bc077ba01064ae2d1d54e67f3ae354b70d61d146b4da9a5d6ebd8aab.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/6e463006bc077ba01064ae2d1d54e67f3ae354b70d61d146b4da9a5d6ebd8aab.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Decrescendo Long  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/17aaccdc92d8a0a91a7b99e1f06d746038fd2b0bccd7449eeea9f78f7ca51990.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/17aaccdc92d8a0a91a7b99e1f06d746038fd2b0bccd7449eeea9f78f7ca51990.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/17aaccdc92d8a0a91a7b99e1f06d746038fd2b0bccd7449eeea9f78f7ca51990.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/17aaccdc92d8a0a91a7b99e1f06d746038fd2b0bccd7449eeea9f78f7ca51990.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/17aaccdc92d8a0a91a7b99e1f06d746038fd2b0bccd7449eeea9f78f7ca51990.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Decrescendo Short  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/38505c061faf23c9ac0b279382dd3f2e36d3c08887b1bcedc447358f770e0998.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/38505c061faf23c9ac0b279382dd3f2e36d3c08887b1bcedc447358f770e0998.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/38505c061faf23c9ac0b279382dd3f2e36d3c08887b1bcedc447358f770e0998.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/38505c061faf23c9ac0b279382dd3f2e36d3c08887b1bcedc447358f770e0998.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/38505c061faf23c9ac0b279382dd3f2e36d3c08887b1bcedc447358f770e0998.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Trumpets</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Swell Long  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/9286af2c06f753f5113765da6fdb70be52999f3f8a6b242a668bb3aff29ea127.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/9286af2c06f753f5113765da6fdb70be52999f3f8a6b242a668bb3aff29ea127.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/9286af2c06f753f5113765da6fdb70be52999f3f8a6b242a668bb3aff29ea127.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/932d347d762968d56c2ed9fad6fcb04e420b2603c79cb81b3baa8658b71a143b.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/9286af2c06f753f5113765da6fdb70be52999f3f8a6b242a668bb3aff29ea127.ogg">
+            

@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Artist Series: Apocalyptica - Dark Cellos</title>
+        <link rel="stylesheet" href="static/index.css">
+        <link rel="icon" href="static/favicon.ico" />
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+      
+
+
+<div class="catalog-container">
+    
+        
+<div class="catalog-header">
+    
+        <script>
+    function redirect(){
+        window.location.href = '/'
+    }
+</script>
+<div class="back-button" onclick="redirect()">
+    <svg id='back-btn-edit-user'width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+</div>
+    
+    <h2></h2>
+    <div class="catalog-header-spacer"></div>
+    <!-- <form action="/search" method = "GET">
+        <div class="search-element">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.25 29.25C22.982 29.25 29.25 22.982 29.25 15.25C29.25 7.51801 22.982 1.25 15.25 1.25C7.51801 1.25 1.25 7.51801 1.25 15.25C1.25 22.982 7.51801 29.25 15.25 29.25Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M32.7492 32.7502L25.1367 25.1377" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>   
+            <input id="search-input"type="text" class="form-control" id="search-text" name="q" aria-describedby="search-text" placeholder="Search for...">
+        </div>
+    </form> -->
+</div>
+    
+    <script src="static/ogvjs-1.8.9/ogv.js"></script>
+    <div class="collection-header" style="background-image: linear-gradient(to bottom, rgba(19, 19, 19, 0.52), rgba(13, 12, 13, 0.852)), url(https://assets.mus.io/9fac3ff880425ae99497f79f28edf95c0591ea72b29699751eba9e3461798672.png); background-repeat: no-repeat; background-size: cover; background-position: 50% 60%;">
+        <h1>Artist Series: Apocalyptica - Dark Cellos</h1>
+        <h2 class="subtext">Dark Solo Cellos</h2>
+        <h3 class="subtext">Solo cello legato to power chords, fast chugs, and ear-bending Cello FX. Apocalyptica is a Cinematic and Post-Rock producer&#39;s dream library.</h3>
+    </div>
+    <script>
+        let audioPlayer, audioElem, playNode, pauseNode, prevElementIdPlaying;
+
+        function collectionDetail(collection){
+            let slug = collection['collectionSlug']
+            window.location.href = '/' + slug
+        }
+        function ogvAudio(url){
+                let player = new OGVPlayer();
+                player.src = url;
+                return player;
+        }
+        function removeAllChildNodes(parent){
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+            return;
+        }
+        function createNodes(){
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+
+            pauseNode = document.createElement('p')
+            pauseNode.classList.add('fa')
+            pauseNode.classList.add('fa-pause-circle-o')
+            pauseNode.style['font-size'] = '24px'
+        }
+        function changeToOGVPlayer(previewUrl){
+            audioPlayer = ogvAudio(previewUrl)
+            audioPlayer.setAttribute('id', previewUrl )
+
+            audioPlayer.onended = function(){
+            let elem = document.getElementById('audio-preview-play-pause-' + previewUrl)
+            removeAllChildNodes(elem)
+            
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+            elem.appendChild(playNode)
+            }
+
+            audioElem = document.getElementById(previewUrl)
+            
+            if (audioElem){
+                audioElem.replaceWith(audioPlayer)
+            }
+            
+        }
+        function previewAudio(previewUrl){
+
+            let prevAudioPlaying = document.getElementById(prevElementIdPlaying)
+
+            if (prevAudioPlaying && (prevElementIdPlaying !== previewUrl)){
+                prevAudioPlaying.pause()
+                let prevAudioElem = document.getElementById('audio-preview-play-pause-'+prevElementIdPlaying)
+                removeAllChildNodes(prevAudioElem)
+                prevAudioElem.appendChild(playNode)
+            }
+            
+            let audio = document.getElementById(previewUrl)
+            let oldNode = document.getElementById('audio-preview-play-pause-'+ previewUrl)
+
+            if (audio.paused == true) {
+
+                audio.play();
+                prevElementIdPlaying = previewUrl
+                removeAllChildNodes(oldNode)
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(pauseNode)
+            
+            } else if (!audio.paused) {
+
+                audio.pause()
+                prevElementIdPlaying = ''
+                removeAllChildNodes(oldNode)
+                createNodes()
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(playNode)
+                
+            }
+        }
+        function loadOGVPlayer(previewUrl){
+            changeToOGVPlayer(previewUrl)
+            createNodes()
+        }
+
+        function checkForExistingOGVPlayer(previewUrl){
+            let element = document.getElementById(previewUrl)
+            if (element.nodeName.toString() == 'OGVJS'){
+                return true;
+            }
+            return false;
+        }
+
+    </script>
+
+    <div class="row-layout">
+        
+        <!-- just call below in main.py and pass info to collection_detail.html -->
+
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Mellow  Keyswitch</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Aggressive  Keyswitch</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable">
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img" />
+                    </div>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Rhythm</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Keyswitch  </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/4b676be8776850e2d664d1083e7779856f81f69f315ae65c5b99b37e9e7ea0dc.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/4b676be8776850e2d664d1083e7779856f81f69f315ae65c5b99b37e9e7ea0dc.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/4b676be8776850e2d664d1083e7779856f81f69f315ae65c5b99b37e9e7ea0dc.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/4b676be8776850e2d664d1083e7779856f81f69f315ae65c5b99b37e9e7ea0dc.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/4b676be8776850e2d664d1083e7779856f81f69f315ae65c5b99b37e9e7ea0dc.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Mellow Legato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/a1b17747069604c31b18c6aa0c71f1d5ca33872e35fe010e2ac937cb58ce0775.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/a1b17747069604c31b18c6aa0c71f1d5ca33872e35fe010e2ac937cb58ce0775.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/a1b17747069604c31b18c6aa0c71f1d5ca33872e35fe010e2ac937cb58ce0775.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/a1b17747069604c31b18c6aa0c71f1d5ca33872e35fe010e2ac937cb58ce0775.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/a1b17747069604c31b18c6aa0c71f1d5ca33872e35fe010e2ac937cb58ce0775.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Mellow Sustain </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/3d4bad1d3fc654b8df097751c022935c93a283bbbc0668d4c2ee8f327d5c192d.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/3d4bad1d3fc654b8df097751c022935c93a283bbbc0668d4c2ee8f327d5c192d.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/3d4bad1d3fc654b8df097751c022935c93a283bbbc0668d4c2ee8f327d5c192d.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/3d4bad1d3fc654b8df097751c022935c93a283bbbc0668d4c2ee8f327d5c192d.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/3d4bad1d3fc654b8df097751c022935c93a283bbbc0668d4c2ee8f327d5c192d.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Mellow Tenuto </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/a078a882bed78340be42d7b41ffc11aced648e60d0999e710f558f2663ec96f0.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/a078a882bed78340be42d7b41ffc11aced648e60d0999e710f558f2663ec96f0.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/a078a882bed78340be42d7b41ffc11aced648e60d0999e710f558f2663ec96f0.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/a078a882bed78340be42d7b41ffc11aced648e60d0999e710f558f2663ec96f0.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/a078a882bed78340be42d7b41ffc11aced648e60d0999e710f558f2663ec96f0.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Mellow Staccato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/fba839a7d2fa40394e87895e5fd4ff129f89ebe17c244e1efb8c1b9e0f936e5d.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/fba839a7d2fa40394e87895e5fd4ff129f89ebe17c244e1efb8c1b9e0f936e5d.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/fba839a7d2fa40394e87895e5fd4ff129f89ebe17c244e1efb8c1b9e0f936e5d.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/fba839a7d2fa40394e87895e5fd4ff129f89ebe17c244e1efb8c1b9e0f936e5d.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/fba839a7d2fa40394e87895e5fd4ff129f89ebe17c244e1efb8c1b9e0f936e5d.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Mellow Tremolo </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/bfc4da55377661ed21c6ee1ecb42c04eb6351ef985d279fc1d85782d6fa2142f.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/bfc4da55377661ed21c6ee1ecb42c04eb6351ef985d279fc1d85782d6fa2142f.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/bfc4da55377661ed21c6ee1ecb42c04eb6351ef985d279fc1d85782d6fa2142f.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/bfc4da55377661ed21c6ee1ecb42c04eb6351ef985d279fc1d85782d6fa2142f.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/bfc4da55377661ed21c6ee1ecb42c04eb6351ef985d279fc1d85782d6fa2142f.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Aggressive Legato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/e8bbc2628cb12725c3dcaf8bb124c18067688fb5e26af4ffb9f5d57722dd7062.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/e8bbc2628cb12725c3dcaf8bb124c18067688fb5e26af4ffb9f5d57722dd7062.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/e8bbc2628cb12725c3dcaf8bb124c18067688fb5e26af4ffb9f5d57722dd7062.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/e8bbc2628cb12725c3dcaf8bb124c18067688fb5e26af4ffb9f5d57722dd7062.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/e8bbc2628cb12725c3dcaf8bb124c18067688fb5e26af4ffb9f5d57722dd7062.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Aggressive Sustain </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/f6e4c09ad74e47bd3c0c1278e0fee75a5101df4add26a305586a1079022c9f86.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/f6e4c09ad74e47bd3c0c1278e0fee75a5101df4add26a305586a1079022c9f86.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/f6e4c09ad74e47bd3c0c1278e0fee75a5101df4add26a305586a1079022c9f86.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/f6e4c09ad74e47bd3c0c1278e0fee75a5101df4add26a305586a1079022c9f86.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/f6e4c09ad74e47bd3c0c1278e0fee75a5101df4add26a305586a1079022c9f86.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Aggressive Tenuto </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/1fb75147af9d19f1a8cb05e05e6d930f5051712158c11a52f710f7184f8dff3f.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/1fb75147af9d19f1a8cb05e05e6d930f5051712158c11a52f710f7184f8dff3f.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/1fb75147af9d19f1a8cb05e05e6d930f5051712158c11a52f710f7184f8dff3f.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/1fb75147af9d19f1a8cb05e05e6d930f5051712158c11a52f710f7184f8dff3f.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/1fb75147af9d19f1a8cb05e05e6d930f5051712158c11a52f710f7184f8dff3f.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Aggressive Staccato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/f1c8f4139023d895e547e63b7e421b494e727bff6303f62d2fe68781b08f3b81.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/f1c8f4139023d895e547e63b7e421b494e727bff6303f62d2fe68781b08f3b81.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/f1c8f4139023d895e547e63b7e421b494e727bff6303f62d2fe68781b08f3b81.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/f1c8f4139023d895e547e63b7e421b494e727bff6303f62d2fe68781b08f3b81.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/f1c8f4139023d895e547e63b7e421b494e727bff6303f62d2fe68781b08f3b81.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Aggressive Tremolo </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/2a49084dc491bc2eefecd57ee52c8eb10a7b59da773e3441966f307ac01e4c0b.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/2a49084dc491bc2eefecd57ee52c8eb10a7b59da773e3441966f307ac01e4c0b.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/2a49084dc491bc2eefecd57ee52c8eb10a7b59da773e3441966f307ac01e4c0b.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/2a49084dc491bc2eefecd57ee52c8eb10a7b59da773e3441966f307ac01e4c0b.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/2a49084dc491bc2eefecd57ee52c8eb10a7b59da773e3441966f307ac01e4c0b.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Aggressive Slide Long</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/cac40b3f01765386fc618fa4d2e4935ef4ee7662e0d44071435e79a780c41861.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/cac40b3f01765386fc618fa4d2e4935ef4ee7662e0d44071435e79a780c41861.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/cac40b3f01765386fc618fa4d2e4935ef4ee7662e0d44071435e79a780c41861.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/cac40b3f01765386fc618fa4d2e4935ef4ee7662e0d44071435e79a780c41861.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/cac40b3f01765386fc618fa4d2e4935ef4ee7662e0d44071435e79a780c41861.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Solo</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext">Aggressive Slide Short</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/b4526f2b31445f572c3fdde45686d5fe8304ad65e9c25c9320b7380ac805ec17.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/b4526f2b31445f572c3fdde45686d5fe8304ad65e9c25c9320b7380ac805ec17.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/b4526f2b31445f572c3fdde45686d5fe8304ad65e9c25c9320b7380ac805ec17.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/b4526f2b31445f572c3fdde45686d5fe8304ad65e9c25c9320b7380ac805ec17.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/b4526f2b31445f572c3fdde45686d5fe8304ad65e9c25c9320b7380ac805ec17.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Rhythm</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain Vibrato</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/c69c556aecd9cff3ea680e9a9f34ea4db334c644bc21cf596506753880049c29.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/c69c556aecd9cff3ea680e9a9f34ea4db334c644bc21cf596506753880049c29.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/c69c556aecd9cff3ea680e9a9f34ea4db334c644bc21cf596506753880049c29.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/c69c556aecd9cff3ea680e9a9f34ea4db334c644bc21cf596506753880049c29.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/c69c556aecd9cff3ea680e9a9f34ea4db334c644bc21cf596506753880049c29.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Rhythm</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain Non Vibrato</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/fcc4ef0211a14f63d8dcc40ee7a7b40a0f5a21fc9c98b28d6211380c752cf36b.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/fcc4ef0211a14f63d8dcc40ee7a7b40a0f5a21fc9c98b28d6211380c752cf36b.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/fcc4ef0211a14f63d8dcc40ee7a7b40a0f5a21fc9c98b28d6211380c752cf36b.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/fcc4ef0211a14f63d8dcc40ee7a7b40a0f5a21fc9c98b28d6211380c752cf36b.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/fcc4ef0211a14f63d8dcc40ee7a7b40a0f5a21fc9c98b28d6211380c752cf36b.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Rhythm</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Staccato </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/609f8f79acc1ad11f4d65bb29222aabb2f62f0ea5ecdb30efc368025e699ab01.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/609f8f79acc1ad11f4d65bb29222aabb2f62f0ea5ecdb30efc368025e699ab01.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/609f8f79acc1ad11f4d65bb29222aabb2f62f0ea5ecdb30efc368025e699ab01.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/609f8f79acc1ad11f4d65bb29222aabb2f62f0ea5ecdb30efc368025e699ab01.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/609f8f79acc1ad11f4d65bb29222aabb2f62f0ea5ecdb30efc368025e699ab01.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Rhythm</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Staccatissimo </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/69a614f8e5cccf30ba60a8faa178daf6bee1757a8407d677b49ca6c16a3e5fc7.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/69a614f8e5cccf30ba60a8faa178daf6bee1757a8407d677b49ca6c16a3e5fc7.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/69a614f8e5cccf30ba60a8faa178daf6bee1757a8407d677b49ca6c16a3e5fc7.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/69a614f8e5cccf30ba60a8faa178daf6bee1757a8407d677b49ca6c16a3e5fc7.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/69a614f8e5cccf30ba60a8faa178daf6bee1757a8407d677b49ca6c16a3e5fc7.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Rhythm</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain Sul Pont</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/a64e30c94ed32ec7e2be724f8af25b439279a555974953062b94d3e99681f312.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/a64e30c94ed32ec7e2be724f8af25b439279a555974953062b94d3e99681f312.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/a64e30c94ed32ec7e2be724f8af25b439279a555974953062b94d3e99681f312.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/a64e30c94ed32ec7e2be724f8af25b439279a555974953062b94d3e99681f312.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/a64e30c94ed32ec7e2be724f8af25b439279a555974953062b94d3e99681f312.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Rhythm</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Tenuto Sul Pont</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/8cf24c6a6920ea802850262eaea7d560ba62ded5f54f98349be506dec2999a85.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/8cf24c6a6920ea802850262eaea7d560ba62ded5f54f98349be506dec2999a85.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/8cf24c6a6920ea802850262eaea7d560ba62ded5f54f98349be506dec2999a85.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/8cf24c6a6920ea802850262eaea7d560ba62ded5f54f98349be506dec2999a85.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/8cf24c6a6920ea802850262eaea7d560ba62ded5f54f98349be506dec2999a85.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Rhythm</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Staccato Sul Pont</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/6fa3933baacb623b88fa397edc751951e7f05ccbeb48c17cd7611f9fdaf59e9b.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/6fa3933baacb623b88fa397edc751951e7f05ccbeb48c17cd7611f9fdaf59e9b.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/6fa3933baacb623b88fa397edc751951e7f05ccbeb48c17cd7611f9fdaf59e9b.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/3cf3ba54401addbb480a1828c1521d31e2743d609c60ca259bf169720c5724c6.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/6fa3933baacb623b88fa397edc751951e7f05ccbeb48c17cd7611f9fdaf59e9b.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/6fa3933baacb623b88fa397edc751951e7f05ccbeb48c17cd7611f9fdaf59e9b.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Rhythm</p>
+                        
+                            <span class="vertical-pipe">&nbsp|&nbsp</span>
+                            <p class="subtext"> Sustain Power Chord</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let e

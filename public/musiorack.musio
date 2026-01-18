@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MusioFile FileVersion="0.0.1">
+  <InstrumentEngineRack>
+    <Instrument instrumentId="50f950950abc4251be89e5574777f16b" releaseId="8c4633df146e9d37760d138cfe18e35a"
+                MasterVolGain="0.5011872053146362" MidiChannel="1" Muted="0"
+                Output="0" PitchBendDownSemiTones="2" PitchBendUpSemiTones="2"
+                SoloMuted="0" Solod="0" slotOrder="0">
+      <PerformableData id="expression" value="1" inputCc="11"/>
+      <PerformableData id="reverb_dry" value="1" inputCc="-1"/>
+      <PerformableData id="reverb_wet" value="0.7" inputCc="91"/>
+      <PerformableData id="reverb_damping" value="0.7" inputCc="-1"/>
+      <PerformableData id="reverb_decay" value="0.678333" inputCc="-1"/>
+      <PerformableData id="reverb_bypass" value="0" inputCc="-1"/>
+      <PerformableData id="envelope_release_curve" value="0.5" inputCc="-1"/>
+      <PerformableData id="envelope_release" value="0.499499" inputCc="-1"/>
+    </Instrument>
+    <Instrument instrumentId="e46b684df0344d868b57ae11895206da" releaseId="d554c2c13511b1d81abaa23e3fb1a1f1"
+                MasterVolGain="0.5011872053146362" MidiChannel="1" Muted="0"
+                Output="0" PitchBendDownSemiTones="2" PitchBendUpSemiTones="2"
+                SoloMuted="0" Solod="0" slotOrder="1">
+      <PerformableData id="pedal_vol" value="0.507025" inputCc="-1"/>
+      <PerformableData id="expression" value="1" inputCc="11"/>
+      <PerformableData id="reverb_wet" value="0.5" inputCc="91"/>
+      <PerformableData id="reverb_decay" value="0.666667" inputCc="-1"/>
+      <PerformableData id="reverb_damping" value="0.8" inputCc="-1"/>
+      <PerformableData id="reverb_dry" value="1" inputCc="-1"/>
+      <PerformableData id="reverb_bypass" value="0" inputCc="-1"/>
+    </Instrument>
+    <Instrument instrumentId="e70adc550937490c959e7cc5d0c09c29" releaseId="a24e77bef8203c758bf2a737cbc2891e"
+                MasterVolGain="0.5011872053146362" MidiChannel="1" Muted="0"
+                Output="0" PitchBendDownSemiTones="2" PitchBendUpSemiTones="2"
+                SoloMuted="0" Solod="0" slotOrder="2">
+      <PerformableData id="p_bc_SurroundMix_solo" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_RoomMix_solo" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_RoomMix_mute" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_SurroundMix_gain" value="0.75" inputCc="-1"/>
+      <PerformableData id="p_bc_OverheadMix_mute" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_StudioMix_solo" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_OverheadMix_solo" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_OverheadMix_gain" value="0.75" inputCc="-1"/>
+      <PerformableData id="expression" value="1" inputCc="11"/>
+      <PerformableData id="reverb_damping" value="0.5" inputCc="-1"/>
+      <PerformableData id="reverb_dry" value="1" inputCc="-1"/>
+      <PerformableData id="p_bc_CloseMix_mute" value="0" inputCc="-1"/>
+      <PerformableData id="reverb_wet" value="0.5" inputCc="91"/>
+      <PerformableData id="reverb_decay" value="0.583333" inputCc="-1"/>
+      <PerformableData id="p_bc_StudioMix_gain" value="0.75" inputCc="-1"/>
+      <PerformableData id="p_bc_CloseMix_gain" value="0.75" inputCc="-1"/>
+      <PerformableData id="p_bc_RoomMix_gain" value="0.75" inputCc="-1"/>
+      <PerformableData id="envelope_release" value="0.498998" inputCc="-1"/>
+      <PerformableData id="reverb_bypass" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_SurroundMix_mute" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_StudioMix_mute" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_CloseMix_solo" value="0" inputCc="-1"/>
+      <PerformableData id="envelope_release_curve" value="0.7937" inputCc="-1"/>
+      <BlendComponentData>
+        <BlendComponent id="bc_SurroundMix" isActive="0" outputNum="-1"/>
+        <BlendComponent id="bc_StudioMix" isActive="1" outputNum="-1"/>
+        <BlendComponent id="bc_RoomMix" isActive="0" outputNum="-1"/>
+        <BlendComponent id="bc_OverheadMix" isActive="0" outputNum="-1"/>
+        <BlendComponent id="bc_CloseMix" isActive="0" outputNum="-1"/>
+      </BlendComponentData>
+    </Instrument>
+    <Instrument instrumentId="429b5ac8ffb544d6b6e7c981e7808ea1" releaseId="0d7323382fb4f331096a3a3392669119"
+                MasterVolGain="0.5011872053146362" MidiChannel="1" Muted="0"
+                Output="0" PitchBendDownSemiTones="2" PitchBendUpSemiTones="2"
+                SoloMuted="0" Solod="0" slotOrder="3">
+      <PerformableData id="p_bc_SurroundMix_solo" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_SurroundMix_gain" value="0.75" inputCc="-1"/>
+      <PerformableData id="p_bc_RoomMix_solo" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_RoomMix_mute" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_SurroundMix_mute" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_CloseMix_solo" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_CloseMix_mute" value="0" inputCc="-1"/>
+      <PerformableData id="pedal_vol" value="0.507025" inputCc="-1"/>
+      <PerformableData id="expression" value="1" inputCc="11"/>
+      <PerformableData id="reverb_bypass" value="0" inputCc="-1"/>
+      <PerformableData id="p_bc_RoomMix_gain" value="0.75" inputCc="-1"/>
+      <PerformableData id="reverb_wet" value="0.5" inputCc="91"/>
+      <PerformableData id="reverb_decay" value="0.666667" inputCc="-1"/>
+      <PerformableData id="reverb_damping" value="0.8" inputCc="-1"/>
+      <PerformableData id="reverb_dry" value="1" inputCc="-1"/>
+      <PerformableData id="p_bc_CloseMix_gain" value="0.75" inputCc="-1"/>
+      <BlendComponentData>
+        <BlendComponent id="bc_SurroundMix" isActive="0" outputNum="-1"/>
+        <BlendComponent id="bc_RoomMix" isActive="0" outputNum="-1"/>
+        <BlendComponent id="bc_CloseMix" isActive="1" outputNum="-1"/>
+      </BlendComponentData>
+    </Instrument>
+  </InstrumentEngineRack>
+</MusioFile>

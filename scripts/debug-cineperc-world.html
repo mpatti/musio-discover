@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>CinePerc - World</title>
+        <link rel="stylesheet" href="static/index.css">
+        <link rel="icon" href="static/favicon.ico" />
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+      
+
+
+<div class="catalog-container">
+    
+        
+<div class="catalog-header">
+    
+        <script>
+    function redirect(){
+        window.location.href = '/'
+    }
+</script>
+<div class="back-button" onclick="redirect()">
+    <svg id='back-btn-edit-user'width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="18" cy="18" r="18" transform="rotate(-180 18 18)" fill="#FB2645"/>
+        <path d="M17.8203 11.4719L11.5566 17.7357L17.8203 23.9994" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.9988 17.5386L24.9219 17.5386" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+</div>
+    
+    <h2></h2>
+    <div class="catalog-header-spacer"></div>
+    <!-- <form action="/search" method = "GET">
+        <div class="search-element">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.25 29.25C22.982 29.25 29.25 22.982 29.25 15.25C29.25 7.51801 22.982 1.25 15.25 1.25C7.51801 1.25 1.25 7.51801 1.25 15.25C1.25 22.982 7.51801 29.25 15.25 29.25Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M32.7492 32.7502L25.1367 25.1377" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>   
+            <input id="search-input"type="text" class="form-control" id="search-text" name="q" aria-describedby="search-text" placeholder="Search for...">
+        </div>
+    </form> -->
+</div>
+    
+    <script src="static/ogvjs-1.8.9/ogv.js"></script>
+    <div class="collection-header" style="background-image: linear-gradient(to bottom, rgba(19, 19, 19, 0.52), rgba(13, 12, 13, 0.852)), url(https://assets.mus.io/37e487b12478dc921ab20280613e9e3feaec09f43fb872c0aa2896c9b4c8fdad.png); background-repeat: no-repeat; background-size: cover; background-position: 50% 60%;">
+        <h1>CinePerc - World</h1>
+        <h2 class="subtext">World Percussion</h2>
+        <h3 class="subtext">CinePerc is a comprehensive orchestral percussion Collection recorded at the world-famous MGM Scoring Stage at Sony Pictures Studios in Los Angeles and recorded by industry veteran Dennis Sands.
+</h3>
+    </div>
+    <script>
+        let audioPlayer, audioElem, playNode, pauseNode, prevElementIdPlaying;
+
+        function collectionDetail(collection){
+            let slug = collection['collectionSlug']
+            window.location.href = '/' + slug
+        }
+        function ogvAudio(url){
+                let player = new OGVPlayer();
+                player.src = url;
+                return player;
+        }
+        function removeAllChildNodes(parent){
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+            return;
+        }
+        function createNodes(){
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+
+            pauseNode = document.createElement('p')
+            pauseNode.classList.add('fa')
+            pauseNode.classList.add('fa-pause-circle-o')
+            pauseNode.style['font-size'] = '24px'
+        }
+        function changeToOGVPlayer(previewUrl){
+            audioPlayer = ogvAudio(previewUrl)
+            audioPlayer.setAttribute('id', previewUrl )
+
+            audioPlayer.onended = function(){
+            let elem = document.getElementById('audio-preview-play-pause-' + previewUrl)
+            removeAllChildNodes(elem)
+            
+            playNode = document.createElement('p')
+            playNode.classList.add('fa')
+            playNode.classList.add('fa-play-circle-o')
+            playNode.style['font-size'] = '24px'
+            elem.appendChild(playNode)
+            }
+
+            audioElem = document.getElementById(previewUrl)
+            
+            if (audioElem){
+                audioElem.replaceWith(audioPlayer)
+            }
+            
+        }
+        function previewAudio(previewUrl){
+
+            let prevAudioPlaying = document.getElementById(prevElementIdPlaying)
+
+            if (prevAudioPlaying && (prevElementIdPlaying !== previewUrl)){
+                prevAudioPlaying.pause()
+                let prevAudioElem = document.getElementById('audio-preview-play-pause-'+prevElementIdPlaying)
+                removeAllChildNodes(prevAudioElem)
+                prevAudioElem.appendChild(playNode)
+            }
+            
+            let audio = document.getElementById(previewUrl)
+            let oldNode = document.getElementById('audio-preview-play-pause-'+ previewUrl)
+
+            if (audio.paused == true) {
+
+                audio.play();
+                prevElementIdPlaying = previewUrl
+                removeAllChildNodes(oldNode)
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(pauseNode)
+            
+            } else if (!audio.paused) {
+
+                audio.pause()
+                prevElementIdPlaying = ''
+                removeAllChildNodes(oldNode)
+                createNodes()
+                document.getElementById('audio-preview-play-pause-' + previewUrl).appendChild(playNode)
+                
+            }
+        }
+        function loadOGVPlayer(previewUrl){
+            changeToOGVPlayer(previewUrl)
+            createNodes()
+        }
+
+        function checkForExistingOGVPlayer(previewUrl){
+            let element = document.getElementById(previewUrl)
+            if (element.nodeName.toString() == 'OGVJS'){
+                return true;
+            }
+            return false;
+        }
+
+    </script>
+
+    <div class="row-layout">
+        
+        <!-- just call below in main.py and pass info to collection_detail.html -->
+
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/5e118f941506dcc31cb4cfa13b50e94bb347a83a7ca51c8ac12f8311fe06f7f9.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/5e118f941506dcc31cb4cfa13b50e94bb347a83a7ca51c8ac12f8311fe06f7f9.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/5e118f941506dcc31cb4cfa13b50e94bb347a83a7ca51c8ac12f8311fe06f7f9.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/5e118f941506dcc31cb4cfa13b50e94bb347a83a7ca51c8ac12f8311fe06f7f9.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/5e118f941506dcc31cb4cfa13b50e94bb347a83a7ca51c8ac12f8311fe06f7f9.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bongo</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/5ad8ac68a5ca5cea5ecf58826e32eeed53a186bc97f47c979f37040ef787db87.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/5ad8ac68a5ca5cea5ecf58826e32eeed53a186bc97f47c979f37040ef787db87.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/5ad8ac68a5ca5cea5ecf58826e32eeed53a186bc97f47c979f37040ef787db87.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/5ad8ac68a5ca5cea5ecf58826e32eeed53a186bc97f47c979f37040ef787db87.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/5ad8ac68a5ca5cea5ecf58826e32eeed53a186bc97f47c979f37040ef787db87.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Conga</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/dd6f58d377edb9c04cf82704a74ff72bb9ab31812cdb2f022993d6b97c7ba77a.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/dd6f58d377edb9c04cf82704a74ff72bb9ab31812cdb2f022993d6b97c7ba77a.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/dd6f58d377edb9c04cf82704a74ff72bb9ab31812cdb2f022993d6b97c7ba77a.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/dd6f58d377edb9c04cf82704a74ff72bb9ab31812cdb2f022993d6b97c7ba77a.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/dd6f58d377edb9c04cf82704a74ff72bb9ab31812cdb2f022993d6b97c7ba77a.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Doumbek</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/67ec41a0b32806b8d89ae46ad8129dd6d12fb4367b6ac7a9961e09d152485619.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/67ec41a0b32806b8d89ae46ad8129dd6d12fb4367b6ac7a9961e09d152485619.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/67ec41a0b32806b8d89ae46ad8129dd6d12fb4367b6ac7a9961e09d152485619.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/67ec41a0b32806b8d89ae46ad8129dd6d12fb4367b6ac7a9961e09d152485619.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/67ec41a0b32806b8d89ae46ad8129dd6d12fb4367b6ac7a9961e09d152485619.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Darbuka</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/9a8b9923068c3be5a2703eb5ae3fd7b968aa0a0337332f5ea5d3570cf446c28f.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/9a8b9923068c3be5a2703eb5ae3fd7b968aa0a0337332f5ea5d3570cf446c28f.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/9a8b9923068c3be5a2703eb5ae3fd7b968aa0a0337332f5ea5d3570cf446c28f.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/9a8b9923068c3be5a2703eb5ae3fd7b968aa0a0337332f5ea5d3570cf446c28f.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/9a8b9923068c3be5a2703eb5ae3fd7b968aa0a0337332f5ea5d3570cf446c28f.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bodhran</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/4fa196ed4a8138592e189b8b5ba2df43f0b4be4ea207be23f5b1a3564be4577a.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/4fa196ed4a8138592e189b8b5ba2df43f0b4be4ea207be23f5b1a3564be4577a.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/4fa196ed4a8138592e189b8b5ba2df43f0b4be4ea207be23f5b1a3564be4577a.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/4fa196ed4a8138592e189b8b5ba2df43f0b4be4ea207be23f5b1a3564be4577a.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/4fa196ed4a8138592e189b8b5ba2df43f0b4be4ea207be23f5b1a3564be4577a.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Frame Drums</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/9cdf6719f2558e5d4bbd20cb4e147158ecc7b2fae15e5b4a52f0d648ac513ba6.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/9cdf6719f2558e5d4bbd20cb4e147158ecc7b2fae15e5b4a52f0d648ac513ba6.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/9cdf6719f2558e5d4bbd20cb4e147158ecc7b2fae15e5b4a52f0d648ac513ba6.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/9cdf6719f2558e5d4bbd20cb4e147158ecc7b2fae15e5b4a52f0d648ac513ba6.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/9cdf6719f2558e5d4bbd20cb4e147158ecc7b2fae15e5b4a52f0d648ac513ba6.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Daf</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/c10b5b3185aa9e3f7707d5fa97beed9cd4182a93cc4455008104c5af455b2179.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/c10b5b3185aa9e3f7707d5fa97beed9cd4182a93cc4455008104c5af455b2179.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/c10b5b3185aa9e3f7707d5fa97beed9cd4182a93cc4455008104c5af455b2179.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/c10b5b3185aa9e3f7707d5fa97beed9cd4182a93cc4455008104c5af455b2179.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/c10b5b3185aa9e3f7707d5fa97beed9cd4182a93cc4455008104c5af455b2179.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Cajon</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/3df79e360cffdfb4dc1fa3730b127e7b684d4bf0dc44cf25f2880e5c691ffecb.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/3df79e360cffdfb4dc1fa3730b127e7b684d4bf0dc44cf25f2880e5c691ffecb.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/3df79e360cffdfb4dc1fa3730b127e7b684d4bf0dc44cf25f2880e5c691ffecb.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/3df79e360cffdfb4dc1fa3730b127e7b684d4bf0dc44cf25f2880e5c691ffecb.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/3df79e360cffdfb4dc1fa3730b127e7b684d4bf0dc44cf25f2880e5c691ffecb.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Timbales</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/857a414c86371c2595593d4a55ad3437aee73948f1466bdf6f48191c13c8ae56.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/857a414c86371c2595593d4a55ad3437aee73948f1466bdf6f48191c13c8ae56.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/857a414c86371c2595593d4a55ad3437aee73948f1466bdf6f48191c13c8ae56.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/857a414c86371c2595593d4a55ad3437aee73948f1466bdf6f48191c13c8ae56.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/857a414c86371c2595593d4a55ad3437aee73948f1466bdf6f48191c13c8ae56.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Dondo</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/6e8aed483658e1662b95456263d1cd0581e8ffff3246f35589d980527e81da24.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/6e8aed483658e1662b95456263d1cd0581e8ffff3246f35589d980527e81da24.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/6e8aed483658e1662b95456263d1cd0581e8ffff3246f35589d980527e81da24.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/6e8aed483658e1662b95456263d1cd0581e8ffff3246f35589d980527e81da24.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/6e8aed483658e1662b95456263d1cd0581e8ffff3246f35589d980527e81da24.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Udu</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/4b7b7f09d854dcbdd69882fe9c0354420dcdebad1268026557fbaa0e9993e92b.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/4b7b7f09d854dcbdd69882fe9c0354420dcdebad1268026557fbaa0e9993e92b.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/4b7b7f09d854dcbdd69882fe9c0354420dcdebad1268026557fbaa0e9993e92b.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/4b7b7f09d854dcbdd69882fe9c0354420dcdebad1268026557fbaa0e9993e92b.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/4b7b7f09d854dcbdd69882fe9c0354420dcdebad1268026557fbaa0e9993e92b.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Whale Drum</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/c43210ca4a3bc83855717002e6841034ff417d06647f04b41ae0738e429e7451.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/c43210ca4a3bc83855717002e6841034ff417d06647f04b41ae0738e429e7451.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/c43210ca4a3bc83855717002e6841034ff417d06647f04b41ae0738e429e7451.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/c43210ca4a3bc83855717002e6841034ff417d06647f04b41ae0738e429e7451.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/c43210ca4a3bc83855717002e6841034ff417d06647f04b41ae0738e429e7451.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Tongue Drum</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/9974d7208027cded34cf7f79d98e041c636a5fb02da6a69e5d9633079d9b9e0a.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/9974d7208027cded34cf7f79d98e041c636a5fb02da6a69e5d9633079d9b9e0a.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/9974d7208027cded34cf7f79d98e041c636a5fb02da6a69e5d9633079d9b9e0a.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/9974d7208027cded34cf7f79d98e041c636a5fb02da6a69e5d9633079d9b9e0a.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/9974d7208027cded34cf7f79d98e041c636a5fb02da6a69e5d9633079d9b9e0a.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Ocean Drum</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/408f7c2aa80ee54fea4a4befdae11dabf2031b61be5a17024a23e106dec71d55.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/408f7c2aa80ee54fea4a4befdae11dabf2031b61be5a17024a23e106dec71d55.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/408f7c2aa80ee54fea4a4befdae11dabf2031b61be5a17024a23e106dec71d55.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/408f7c2aa80ee54fea4a4befdae11dabf2031b61be5a17024a23e106dec71d55.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/408f7c2aa80ee54fea4a4befdae11dabf2031b61be5a17024a23e106dec71d55.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Rain Sticks</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/b91f9df23d21290808b59fe7d597f85ec4f4258ef5ab5eb266e45a7d235a98e8.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/b91f9df23d21290808b59fe7d597f85ec4f4258ef5ab5eb266e45a7d235a98e8.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/b91f9df23d21290808b59fe7d597f85ec4f4258ef5ab5eb266e45a7d235a98e8.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/b91f9df23d21290808b59fe7d597f85ec4f4258ef5ab5eb266e45a7d235a98e8.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/b91f9df23d21290808b59fe7d597f85ec4f4258ef5ab5eb266e45a7d235a98e8.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Tambourika</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/b11880d7de5da873d43f8a5f53971c35b0cc8da1e0bc53ebb112e5d9e3a4d6ac.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/b11880d7de5da873d43f8a5f53971c35b0cc8da1e0bc53ebb112e5d9e3a4d6ac.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/b11880d7de5da873d43f8a5f53971c35b0cc8da1e0bc53ebb112e5d9e3a4d6ac.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/b11880d7de5da873d43f8a5f53971c35b0cc8da1e0bc53ebb112e5d9e3a4d6ac.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/b11880d7de5da873d43f8a5f53971c35b0cc8da1e0bc53ebb112e5d9e3a4d6ac.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Riq</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/8a6b4a6129cc1714ab0f32eb0dc7e3ac2db2f2848a13c756e2f29efe6343cc42.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/8a6b4a6129cc1714ab0f32eb0dc7e3ac2db2f2848a13c756e2f29efe6343cc42.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/8a6b4a6129cc1714ab0f32eb0dc7e3ac2db2f2848a13c756e2f29efe6343cc42.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/8a6b4a6129cc1714ab0f32eb0dc7e3ac2db2f2848a13c756e2f29efe6343cc42.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/8a6b4a6129cc1714ab0f32eb0dc7e3ac2db2f2848a13c756e2f29efe6343cc42.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Bamboo Shaker</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/62522b09c3567d9c4d10b7059e8c2f480497ab0b59ea6b6dcfca335f7b183264.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/62522b09c3567d9c4d10b7059e8c2f480497ab0b59ea6b6dcfca335f7b183264.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/62522b09c3567d9c4d10b7059e8c2f480497ab0b59ea6b6dcfca335f7b183264.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/62522b09c3567d9c4d10b7059e8c2f480497ab0b59ea6b6dcfca335f7b183264.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/62522b09c3567d9c4d10b7059e8c2f480497ab0b59ea6b6dcfca335f7b183264.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Maracas</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/84dbabecda56351e27215670d391d183730687ebf9d89aeff859e80695ad3545.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/84dbabecda56351e27215670d391d183730687ebf9d89aeff859e80695ad3545.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/84dbabecda56351e27215670d391d183730687ebf9d89aeff859e80695ad3545.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/84dbabecda56351e27215670d391d183730687ebf9d89aeff859e80695ad3545.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/84dbabecda56351e27215670d391d183730687ebf9d89aeff859e80695ad3545.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Plastic Shakers</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/d23f2407fe7e381f352aabbd0809c942c41b393dd38bb7330b219a66986d24ed.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/d23f2407fe7e381f352aabbd0809c942c41b393dd38bb7330b219a66986d24ed.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/d23f2407fe7e381f352aabbd0809c942c41b393dd38bb7330b219a66986d24ed.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/d23f2407fe7e381f352aabbd0809c942c41b393dd38bb7330b219a66986d24ed.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/d23f2407fe7e381f352aabbd0809c942c41b393dd38bb7330b219a66986d24ed.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Cabasa</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/40647217a2c562a73d2aa221e980bcc69d190893df72a356b5b537493948942f.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/40647217a2c562a73d2aa221e980bcc69d190893df72a356b5b537493948942f.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/40647217a2c562a73d2aa221e980bcc69d190893df72a356b5b537493948942f.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/40647217a2c562a73d2aa221e980bcc69d190893df72a356b5b537493948942f.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/40647217a2c562a73d2aa221e980bcc69d190893df72a356b5b537493948942f.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>African Pod Shaker</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/55c7a13dbca0e516ace86755a87a775831e99a0fcc371f05f179a701617fa524.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/55c7a13dbca0e516ace86755a87a775831e99a0fcc371f05f179a701617fa524.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/55c7a13dbca0e516ace86755a87a775831e99a0fcc371f05f179a701617fa524.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img>
+                        <span class="audio-preview-play-pause" id="audio-preview-play-pause-https://assets.mus.io/55c7a13dbca0e516ace86755a87a775831e99a0fcc371f05f179a701617fa524.ogg">
+                            <p style="font-size:24px" class="fa">&#xf01d;</p>
+                        </span>
+                    </div>
+                    <span id=https://assets.mus.io/55c7a13dbca0e516ace86755a87a775831e99a0fcc371f05f179a701617fa524.ogg></span>
+                    
+                </div>
+                <div class="instrument-row-info">
+                    <div class="instrument-row-title">
+                        <p>Shakere</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-item instrument-row-item">
+            <div class="instrument-card" style="display:flex;">
+                <div class="instrument-row-audio-preview">
+                    
+                    
+                    <div class="instrument-row-audio-preview-clickable" 
+                        onclick="
+                        let existingOGV = checkForExistingOGVPlayer('https://assets.mus.io/e9e1633bbf55995fefe24464ca35d7a1d613bac28d04b17977b58aab92f29fef.ogg')
+                        if (!existingOGV){
+                            loadOGVPlayer('https://assets.mus.io/e9e1633bbf55995fefe24464ca35d7a1d613bac28d04b17977b58aab92f29fef.ogg')
+                        }
+                            previewAudio('https://assets.mus.io/e9e1633bbf55995fefe24464ca35d7a1d613bac28d04b17977b58aab92f29fef.ogg')
+                        "
+                        target="_blank" >
+                        <img src=https://assets.mus.io/6dd3f6be31e3e3eb08fd1cfd2133f3248300901f1b67b9704b4b3698d4950898.png  style="width:5rem" class="instrument-row-img"></img
