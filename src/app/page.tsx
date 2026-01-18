@@ -621,13 +621,10 @@ export default function Home() {
                     i.tags.some(t => t.toLowerCase().includes(query))
                   );
                 })
-                .map((instrument, index) => (
-                <motion.div
+                .map((instrument) => (
+                <div
                   key={instrument.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.02 }}
-                  className="instrument-card group"
+                  className="instrument-card group catalog-item"
                   onClick={() => addToPalette(instrument)}
                 >
                   <div 
@@ -654,7 +651,7 @@ export default function Home() {
                     <p className="title">{instrument.name}</p>
                     <p className="subtitle">{instrument.collection}</p>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </section>
