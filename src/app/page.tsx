@@ -230,7 +230,7 @@ export default function Home() {
             {/* Hero Section with Backdrop Mosaic */}
             <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
               {/* Background Mosaic Grid */}
-              <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-0">
+              <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-0 blur-[2px]">
                 {uniqueCollections.slice(0, 48).map((inst, idx) => (
                   <div 
                     key={inst.collectionSlug + idx}
