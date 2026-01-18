@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, 
@@ -190,25 +190,30 @@ export default function Home() {
     'tonal-tickles',                // Tonal Tickles
     'ancient-bones',                // Ancient Bones
   ];
-  const featuredInstruments = featuredInstrumentIds
-    .map(id => instruments.find(i => i.id === id))
-    .filter(Boolean) as typeof instruments;
+  const featuredInstruments = useMemo(() => 
+    featuredInstrumentIds
+      .map(id => instruments.find(i => i.id === id))
+      .filter(Boolean) as typeof instruments,
+    []
+  );
   
   // New Sounds from Cinesamples - specific instrument IDs to feature
-  const newSoundsIds = [
-    'south-african-voices-group',   // South African Choir
-    'south-african-voices-female',  // South African Female Choir  
-    'south-african-voices-male',    // South African Male Choir
-    'cinelegacy-harp',              // CineLegacy: Harp
-    'drum-machine-cr78',            // CR-78
-    'drum-machine-cr8000',          // CR-8000
-    'drum-machine-dmx',             // DMX
-    'drum-machine-sk1',             // SK-1
-    'drum-machine-tr606',           // TR-606
-  ];
-  const newSoundsInstruments = newSoundsIds
-    .map(id => instruments.find(i => i.id === id))
-    .filter(Boolean) as typeof instruments;
+  const newSoundsInstruments = useMemo(() => {
+    const ids = [
+      'south-african-voices-group',   // South African Choir
+      'south-african-voices-female',  // South African Female Choir  
+      'south-african-voices-male',    // South African Male Choir
+      'cinelegacy-harp',              // CineLegacy: Harp
+      'drum-machine-cr78',            // CR-78
+      'drum-machine-cr8000',          // CR-8000
+      'drum-machine-dmx',             // DMX
+      'drum-machine-sk1',             // SK-1
+      'drum-machine-tr606',           // TR-606
+    ];
+    return ids
+      .map(id => instruments.find(i => i.id === id))
+      .filter(Boolean) as typeof instruments;
+  }, []);
 
   return (
     <div className="min-h-screen bg-[var(--color-bg-primary)]">
@@ -503,12 +508,9 @@ export default function Home() {
                   <div className="mb-8">
                     <h3 className="section-title mb-4">New Sounds from Cinesamples (Included in Musio+)</h3>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                      {newSoundsInstruments.map((instrument, index) => (
-                        <motion.div
+                      {newSoundsInstruments.map((instrument) => (
+                        <div
                           key={instrument.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1 }}
                           className="instrument-card group"
                           onClick={() => addToPalette(instrument)}
                         >
@@ -534,7 +536,7 @@ export default function Home() {
                             <p className="title">{instrument.name}</p>
                             <p className="subtitle">{instrument.description}</p>
                           </div>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -543,12 +545,9 @@ export default function Home() {
                   <div>
                     <h3 className="section-title mb-4">Featured Instruments</h3>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                      {featuredInstruments.map((instrument, index) => (
-                        <motion.div
+                      {featuredInstruments.map((instrument) => (
+                        <div
                           key={instrument.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.05 }}
                           className="instrument-card group"
                           onClick={() => addToPalette(instrument)}
                         >
@@ -574,7 +573,7 @@ export default function Home() {
                             <p className="title text-xs">{instrument.name}</p>
                             <p className="subtitle">{instrument.collection}</p>
                           </div>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
                   </div>
