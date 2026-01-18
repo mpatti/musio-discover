@@ -240,7 +240,7 @@ export default function Home() {
                   left: '-40%',
                   right: '-40%',
                   bottom: '-60%',
-                  transform: 'rotateX(12deg) rotateZ(-10deg) scale(1.1)',
+                  transform: 'rotateX(12deg) rotateZ(-10deg) scale(0.95)',
                   transformOrigin: 'center center',
                   transformStyle: 'preserve-3d',
                 }}
