@@ -1,9 +1,9 @@
 // Musio File Generator
 // Generates .musio rack files that can be loaded into the Musio plugin
-// Uses collection-level instrument IDs that Musio recognizes
+// Uses instrument UUIDs from the catalog CSV
 
 import { Instrument } from '@/data/full-instruments';
-import { instrumentIdMappings } from '@/data/instrument-id-mappings';
+import { collectionDefaultUUIDs, findInstrumentUUID } from '@/data/instrument-uuids';
 
 export interface MusioInstrumentConfig {
   instrumentId: string;
@@ -36,39 +36,54 @@ const DEFAULT_PERFORMABLE_DATA = [
   { id: 'reverb_bypass', value: '0', inputCc: '-1' },
 ];
 
-// Slug normalization to match the mappings format
-function normalizeSlug(slug: string): string {
-  // Try variations of the slug to match the mappings
-  const variations = [
-    slug,
-    slug.replace(/-core$/, ''),
-    slug.replace(/-pro$/, ''),
-    slug.replace(/^artist-series-/, ''),
-    slug.replace(/^create-series-/, ''),
-    slug.replace(/^vintage-drum-machine-/, 'drum-machine-'),
-    slug.replace(/^vintage-synthesizer-/, ''),
-    slug.replace(/^vintage-synth-bass-/, ''),
-    slug.replace(/-1$/, ''),
-  ];
-  
-  for (const variation of variations) {
-    if (instrumentIdMappings[variation]) {
-      return variation;
-    }
+// Known releaseIds from working .musio files
+// These map instrumentId -> releaseId
+const knownReleaseIds: Record<string, string> = {
+  '50f950950abc4251be89e5574777f16b': '8c4633df146e9d37760d138cfe18e35a', // CineLegacy Harp
+  '74af6b250bab4382b6b6d911f6a4040a': '50f51b23015aadadb3adb070ccaab1e7', // Kalimba
+  'e46b684df0344d868b57ae11895206da': 'd554c2c13511b1d81abaa23e3fb1a1f1', // Session Upright
+  'e70adc550937490c959e7cc5d0c09c29': 'a24e77bef8203c758bf2a737cbc2891e', // From musiorack.musio
+  '429b5ac8ffb544d6b6e7c981e7808ea1': '0d7323382fb4f331096a3a3392669119', // From musiorack.musio
+};
+
+// Generate a releaseId - try known mapping first, then generate a hash
+function getReleaseId(instrumentId: string): string {
+  // Check if we have a known releaseId for this instrument
+  if (knownReleaseIds[instrumentId]) {
+    return knownReleaseIds[instrumentId];
   }
   
-  return slug;
-}
-
-// Get the instrument IDs for a collection
-function getInstrumentIds(collectionSlug: string): { instrumentId: string; releaseId: string } | null {
-  const normalizedSlug = normalizeSlug(collectionSlug);
-  return instrumentIdMappings[normalizedSlug] || null;
-}
-
-// Generate a placeholder UUID as fallback
-function generatePlaceholderUUID(seed: string): string {
+  // Generate a deterministic releaseId based on the instrumentId
+  // This is a fallback - ideally we'd have all releaseIds from the API
   let hash = 0;
+  const seed = instrumentId + '_release';
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  
+  const absHash = Math.abs(hash);
+  const hex1 = absHash.toString(16).padStart(8, '0');
+  const hex2 = ((absHash * 31) & 0xffffffff).toString(16).padStart(8, '0');
+  const hex3 = ((absHash * 127) & 0xffffffff).toString(16).padStart(8, '0');
+  const hex4 = ((absHash * 255) & 0xffffffff).toString(16).padStart(8, '0');
+  return (hex1 + hex2 + hex3 + hex4).substring(0, 32);
+}
+
+// Get the instrument UUID from the catalog
+function getInstrumentUUID(instrument: Instrument): string {
+  // First try to find by instrument name and collection
+  const uuid = findInstrumentUUID(instrument.collectionSlug, instrument.name);
+  if (uuid) return uuid;
+  
+  // Fall back to collection default
+  const defaultUuid = collectionDefaultUUIDs[instrument.collectionSlug];
+  if (defaultUuid) return defaultUuid;
+  
+  // Last resort: generate a placeholder (won't work in Musio)
+  let hash = 0;
+  const seed = instrument.collectionSlug + instrument.name;
   for (let i = 0; i < seed.length; i++) {
     const char = seed.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
@@ -89,21 +104,9 @@ function generateInstrumentXml(
   slotOrder: number,
   config?: Partial<MusioInstrumentConfig>
 ): string {
-  // Get the real IDs for this collection from the mappings
-  const ids = getInstrumentIds(instrument.collectionSlug);
-  
-  let instrumentId: string;
-  let releaseId: string;
-  
-  if (ids) {
-    instrumentId = config?.instrumentId || ids.instrumentId;
-    releaseId = config?.releaseId || ids.releaseId;
-  } else {
-    // Fallback to generated placeholders (these won't work but prevent crashes)
-    console.warn(`No mapping found for collection: ${instrument.collectionSlug}`);
-    instrumentId = config?.instrumentId || generatePlaceholderUUID(instrument.collectionSlug + '-inst');
-    releaseId = config?.releaseId || generatePlaceholderUUID(instrument.collectionSlug + '-release');
-  }
+  // Get the real UUID for this instrument from the catalog
+  const instrumentId = config?.instrumentId || getInstrumentUUID(instrument);
+  const releaseId = config?.releaseId || getReleaseId(instrumentId);
   
   const settings = {
     ...DEFAULT_SETTINGS,
