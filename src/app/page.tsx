@@ -21,6 +21,7 @@ import {
   Combo, 
   InstrumentWithRole,
 } from '@/lib/recommendation-engine';
+import { downloadMusioRack } from '@/lib/musio-file-generator';
 
 
 // Gradient backgrounds for instrument cards
@@ -434,8 +435,8 @@ export default function Home() {
                             {/* Download Button */}
                             <button
                               disabled
-                              className="btn-primary flex items-center gap-2 text-sm opacity-50 cursor-not-allowed mt-4"
-                              title="Coming soon"
+                              className="btn-primary flex items-center gap-2 text-sm mt-4"
+                              onClick={() => downloadMusioRack(selectedCombo.instruments, selectedCombo.name)}
                             >
                               Download Rack
                             </button>
@@ -669,8 +670,8 @@ export default function Home() {
                 <div className="flex items-center gap-3">
                   <button
                     disabled
-                    className="btn-primary flex items-center gap-2 text-sm py-1.5 px-3 opacity-50 cursor-not-allowed"
-                    title="Coming soon"
+                    className="btn-primary flex items-center gap-2 text-sm py-1.5 px-3"
+                    onClick={() => downloadMusioRack(palette, 'My Custom Rack')}
                   >
                     Download Rack
                   </button>
