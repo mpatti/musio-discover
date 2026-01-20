@@ -420,11 +420,6 @@ export default function Home() {
                               <div>
                                 <div className="flex items-center gap-2 mb-1">
                                   <h3 className="text-xl font-bold">{selectedCombo.name}</h3>
-                                  {selectedCombo.generatedBy === 'claude' && (
-                                    <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-gradient-to-r from-[#D97706] to-[#F59E0B] text-white">
-                                      ✨ AI Generated
-                                    </span>
-                                  )}
                                 </div>
                                 <p className="text-sm text-[var(--color-text-secondary)]">
                                   {selectedCombo.description}
@@ -434,7 +429,6 @@ export default function Home() {
 
                             {/* Download Button */}
                             <button
-                              disabled
                               className="btn-primary flex items-center gap-2 text-sm mt-4"
                               onClick={() => downloadMusioRack(selectedCombo.instruments, selectedCombo.name)}
                             >
@@ -669,7 +663,6 @@ export default function Home() {
 
                 <div className="flex items-center gap-3">
                   <button
-                    disabled
                     className="btn-primary flex items-center gap-2 text-sm py-1.5 px-3"
                     onClick={() => downloadMusioRack(palette, 'My Custom Rack')}
                   >
