@@ -454,20 +454,20 @@ export default function Home() {
                             </div>
                           </div>
 
-                          {/* Instruments Grid */}
-                          <div className="p-5">
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          {/* Instruments List - Musio Style */}
+                          <div className="p-3">
+                            <div className="flex flex-col gap-1">
                               {selectedCombo.instruments.map((instrument, index) => (
                                 <motion.div
                                   key={instrument.id}
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ delay: index * 0.05 }}
-                                  className="instrument-card group"
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: index * 0.03 }}
+                                  className="musio-instrument-row group"
                                 >
-                                  {/* Cover */}
+                                  {/* Thumbnail */}
                                   <div 
-                                    className="cover relative"
+                                    className="musio-row-thumbnail"
                                     style={{ background: categoryGradients[instrument.category] }}
                                   >
                                     {instrument.imageUrl && (
@@ -478,41 +478,37 @@ export default function Home() {
                                         className="absolute inset-0 w-full h-full object-cover"
                                       />
                                     )}
-                                    {!instrument.imageUrl && (
-                                      <div className="absolute inset-0 flex flex-col items-center justify-center p-3">
-                                        <span className="text-3xl mb-2 opacity-90">
-                                          {instrument.category === 'strings' && '🎻'}
-                                          {instrument.category === 'brass' && '🎺'}
-                                          {instrument.category === 'woodwinds' && '🎷'}
-                                          {instrument.category === 'percussion' && '🥁'}
-                                          {instrument.category === 'keyboards' && '🎹'}
-                                          {instrument.category === 'synths' && '🎛️'}
-                                          {instrument.category === 'vocals' && '🎤'}
-                                          {instrument.category === 'world' && '🌍'}
-                                          {instrument.category === 'guitars' && '🎸'}
-                                          {instrument.category === 'bass' && '🎸'}
-                                          {instrument.category === 'orchestral' && '🎼'}
-                                          {instrument.category === 'fx' && '✨'}
-                                          {instrument.category === 'other' && '🎵'}
-                                        </span>
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/80">
-                                          {instrument.category}
-                                        </span>
-                                      </div>
-                                    )}
-
-                                    {/* Premium badge */}
                                   </div>
 
-                                  {/* Info */}
-                                  <div className="info">
-                                    <p className="title">{instrument.name}</p>
-                                    <p className="subtitle">{instrument.collection}</p>
-                                    <div className="flex items-center gap-1 mt-2">
-                                      <span className="badge badge-category text-[10px] py-0.5">
-                                        {instrument.assignedRole}
-                                      </span>
-                                    </div>
+                                  {/* Instrument Info */}
+                                  <div className="flex-1 min-w-0 flex items-center">
+                                    <span className="musio-row-title">
+                                      <span className="font-semibold text-white">{instrument.collection}</span>
+                                      <span className="text-[var(--color-text-muted)] mx-2">|</span>
+                                      <span className="text-[var(--color-text-secondary)]">{instrument.name}</span>
+                                    </span>
+                                  </div>
+
+                                  {/* Role Badge */}
+                                  <div className="hidden sm:flex items-center">
+                                    <span className="text-xs text-[var(--color-text-muted)] px-2 py-1 rounded bg-white/5">
+                                      {instrument.assignedRole}
+                                    </span>
+                                  </div>
+
+                                  {/* Version */}
+                                  <div className="hidden md:flex items-center text-xs text-[var(--color-text-muted)] w-12">
+                                    v1.0
+                                  </div>
+
+                                  {/* Load Button */}
+                                  <div className="flex items-center gap-1">
+                                    <button className="musio-load-btn">
+                                      Load
+                                      <svg className="w-3 h-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                      </svg>
+                                    </button>
                                   </div>
                                 </motion.div>
                               ))}
