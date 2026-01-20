@@ -1,9 +1,9 @@
 // Musio File Generator
 // Generates .musio rack files that can be loaded into the Musio plugin
-// Uses real instrument UUIDs from the catalog
+// Uses collection-level instrument IDs that Musio recognizes
 
 import { Instrument } from '@/data/full-instruments';
-import { findInstrumentUUID, getRandomUUID, collectionDefaultUUIDs } from '@/data/instrument-uuids';
+import { instrumentIdMappings } from '@/data/instrument-id-mappings';
 
 export interface MusioInstrumentConfig {
   instrumentId: string;
@@ -36,43 +36,37 @@ const DEFAULT_PERFORMABLE_DATA = [
   { id: 'reverb_bypass', value: '0', inputCc: '-1' },
 ];
 
-// Generate a release ID based on the instrument UUID
-// The release ID is derived from the UUID
-function generateReleaseId(instrumentUuid: string): string {
-  let hash = 0;
-  for (let i = 0; i < instrumentUuid.length; i++) {
-    const char = instrumentUuid.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
+// Slug normalization to match the mappings format
+function normalizeSlug(slug: string): string {
+  // Try variations of the slug to match the mappings
+  const variations = [
+    slug,
+    slug.replace(/-core$/, ''),
+    slug.replace(/-pro$/, ''),
+    slug.replace(/^artist-series-/, ''),
+    slug.replace(/^create-series-/, ''),
+    slug.replace(/^vintage-drum-machine-/, 'drum-machine-'),
+    slug.replace(/^vintage-synthesizer-/, ''),
+    slug.replace(/^vintage-synth-bass-/, ''),
+    slug.replace(/-1$/, ''),
+  ];
+  
+  for (const variation of variations) {
+    if (instrumentIdMappings[variation]) {
+      return variation;
+    }
   }
   
-  const absHash = Math.abs(hash);
-  const hex1 = absHash.toString(16).padStart(8, '0');
-  const hex2 = (absHash * 31).toString(16).padStart(8, '0');
-  const hex3 = (absHash * 127).toString(16).padStart(8, '0');
-  const hex4 = (absHash * 255).toString(16).padStart(8, '0');
-  return (hex1 + hex2 + hex3 + hex4).substring(0, 32);
+  return slug;
 }
 
-// Get the real UUID for an instrument
-function getInstrumentUUID(instrument: Instrument): string {
-  // First try to find by instrument name and collection
-  const uuid = findInstrumentUUID(instrument.collectionSlug, instrument.name);
-  if (uuid) return uuid;
-  
-  // Fall back to collection default
-  const defaultUuid = collectionDefaultUUIDs[instrument.collectionSlug];
-  if (defaultUuid) return defaultUuid;
-  
-  // Last resort: get a random one from the collection
-  const randomUuid = getRandomUUID(instrument.collectionSlug);
-  if (randomUuid) return randomUuid;
-  
-  // Ultimate fallback: generate a placeholder
-  return generatePlaceholderUUID(instrument.collectionSlug + instrument.name);
+// Get the instrument IDs for a collection
+function getInstrumentIds(collectionSlug: string): { instrumentId: string; releaseId: string } | null {
+  const normalizedSlug = normalizeSlug(collectionSlug);
+  return instrumentIdMappings[normalizedSlug] || null;
 }
 
-// Generate a placeholder UUID as last resort
+// Generate a placeholder UUID as fallback
 function generatePlaceholderUUID(seed: string): string {
   let hash = 0;
   for (let i = 0; i < seed.length; i++) {
@@ -95,9 +89,21 @@ function generateInstrumentXml(
   slotOrder: number,
   config?: Partial<MusioInstrumentConfig>
 ): string {
-  // Get the real UUID for this instrument
-  const instrumentId = config?.instrumentId || getInstrumentUUID(instrument);
-  const releaseId = config?.releaseId || generateReleaseId(instrumentId);
+  // Get the real IDs for this collection from the mappings
+  const ids = getInstrumentIds(instrument.collectionSlug);
+  
+  let instrumentId: string;
+  let releaseId: string;
+  
+  if (ids) {
+    instrumentId = config?.instrumentId || ids.instrumentId;
+    releaseId = config?.releaseId || ids.releaseId;
+  } else {
+    // Fallback to generated placeholders (these won't work but prevent crashes)
+    console.warn(`No mapping found for collection: ${instrument.collectionSlug}`);
+    instrumentId = config?.instrumentId || generatePlaceholderUUID(instrument.collectionSlug + '-inst');
+    releaseId = config?.releaseId || generatePlaceholderUUID(instrument.collectionSlug + '-release');
+  }
   
   const settings = {
     ...DEFAULT_SETTINGS,
